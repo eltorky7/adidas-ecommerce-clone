@@ -1,0 +1,47 @@
+[
+  {
+    "name": "experience-component",
+    "items": [
+      {
+        "color": "light",
+        "style": "bottom",
+        "titleHead": "Anthony Edwards 2",
+        "content": "This is a statement, not a shoe.",
+        "backgroundLarge": "/images/Home/emc-anthony_edwards_2_core_black-originals-fw25-launch-hp-mh-d.jpg",
+        "backgroundMini": "../images/Home/emc-anthony_edwards_2_core_black-originals-fw25-launch-hp-mh-m.jpg"
+      },
+      {
+        "color": "light",
+        "style": "bottom",
+        "titleHead": "Adidas Z.N.E.",
+        "content": "A team way of life.",
+        "backgroundLarge": "/images/Home/emc-zne-yamal-hp-mh-d.jpg",
+        "backgroundMini": "/images/Home/emc-zne-yamal-hp-mh-m.jpg"
+      }
+    ]
+  },
+  {
+    "name": "slider-category",
+    "title": "Who are you shopping for?",
+    "items": [
+      {
+        "color": "light",
+        "link": "#men",
+        "titleBtn": "Men",
+        "background": "images/Home/em-za-categorytiles-hp-men-promoblock.jpg"
+      },
+      {
+        "color": "light",
+        "link": "#women",
+        "titleBtn": "Women",
+        "background": "images/Home/em-za-categorytiles-hp-women-promoblock.jpg"
+      },
+      {
+        "color": "light",
+        "link": "#kids",
+        "titleBtn": "Kids",
+        "background": "images/Home/em-za-categorytiles-hp-kids-promoblock.jpg"
+      }
+    ]
+  }
+]

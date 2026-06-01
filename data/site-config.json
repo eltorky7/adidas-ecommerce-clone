@@ -1,0 +1,39 @@
+{
+  "routes": {
+    "home": {
+      "viewId": "viewHome",
+      "jsonPath": "/JS/data/home.json",
+      "style": "landing"
+    },
+
+    "details": {
+      "viewId": "view-details",
+      "jsonPath": "/JS/data/products.json",
+      "style": "details"
+    },
+
+    "shop": {
+      "viewId": "view-shop",
+      "jsonPath": "/JS/data/sales.json",
+      "style": "shop"
+    },
+
+    "cart": {
+      "viewId": "view-cart",
+      "jsonPath": "/JS/data/cart.json",
+      "style": "cart"
+    },
+
+    "wishlist": {
+      "viewId": "view-wishlist",
+      "jsonPath": "/JS/data/wishlist.json",
+      "style": "wishlist"
+    },
+
+    "setting": {
+      "viewId": "view-setting",
+      "jsonPath": "",
+      "style": ""
+    }
+  }
+}

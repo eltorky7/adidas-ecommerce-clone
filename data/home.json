@@ -1,0 +1,82 @@
+[
+  {
+    "name": "experience-component",
+    "items": [
+      {
+        "color": "light",
+        "style": "bottom",
+        "titleHead": "Adidas Z.N.E.",
+        "content": "A team way of life.",
+        "desktop": {
+          "src": "/images/Home/hero_1.webp",
+          "srcset": [
+            ["/images/Home/hero_1.webp", "1x"],
+            ["/images/Home/hero_1.webp", "2x"]
+          ]
+        },
+        "mobile": {
+          "src": "../images/Home/emc-zne-yamal-hp-mh-m.webp",
+          "srcset": [
+            ["/images/Home/emc-zne-yamal-hp-mh-m.webp", "1x"],
+            ["/images/Home/emc-zne-yamal-hp-mh-m.webp", "2x"]
+          ]
+        }
+      },
+      {
+        "color": "light",
+        "style": "bottom",
+        "titleHead": "Anthony Edwards 2",
+        "content": "This is a statement, not a shoe.",
+        "desktop": {
+          "src": "../images/Home/hero_2.webp",
+          "srcset": [
+            ["../images/Home/hero_2.webp", "1x"],
+            ["../images/Home/hero_2.webp", "2x"]
+          ]
+        },
+        "mobile": {
+          "src": "/images/Home/emc-anthony_edwards_2_core_black-originals-fw25-launch-hp-mh-m.webp",
+          "srcset": [
+            [
+              "/images/Home/emc-anthony_edwards_2_core_black-originals-fw25-launch-hp-mh-m.webp",
+              "1x"
+            ],
+            [
+              "/images/Home/emc-anthony_edwards_2_core_black-originals-fw25-launch-hp-mh-m.webp",
+              "2x"
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "slider-category",
+    "title": "Who are you shopping for?",
+    "items": [
+      {
+        "color": "light",
+        "link": "#men",
+        "titleBtn": "Men",
+        "background": "/images/Home/em-za-categorytiles-hp-men-promoblock.jpg"
+      },
+      {
+        "color": "light",
+        "link": "#women",
+        "titleBtn": "Women",
+        "background": "/images/Home/em-za-categorytiles-hp-women-promoblock.jpg"
+      },
+      {
+        "color": "light",
+        "link": "#kids",
+        "titleBtn": "Kids",
+        "background": "/images/Home/em-za-categorytiles-hp-kids-promoblock.jpg"
+      }
+    ]
+  },
+  {
+    "name": "footer",
+    "isSaleMessage": true,
+    "text": "Become a Member & get 10% off"
+  }
+]

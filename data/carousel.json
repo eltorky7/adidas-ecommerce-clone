@@ -1,0 +1,189 @@
+[
+  {
+    "style": "1",
+    "items": [
+      {
+        "title": "",
+        "desc": "",
+        "n": 4,
+        "special": false
+      }
+    ],
+    "available": ["sale", "evo sl", "originals", "sportswear", "best sellers"],
+    "home": [
+      {
+        "content": "sale",
+        "type": "is_sale",
+        "gender": "home"
+      },
+      {
+        "content": "evo sl",
+        "type": "is_evo_sl",
+        "gender": "home"
+      }
+    ],
+    "men": [
+      {
+        "content": "sale",
+        "type": "is_sale",
+        "gender": "men"
+      },
+      {
+        "content": "evo sl",
+        "type": "is_evo_sl",
+        "gender": "men"
+      }
+    ],
+    "women": [
+      {
+        "content": "sale",
+        "type": "is_sale",
+        "gender": "women"
+      },
+      {
+        "content": "evo sl",
+        "type": "is_evo_sl",
+        "gender": "women"
+      }
+    ],
+    "kids": [
+      {
+        "content": "originals",
+        "type": "brand",
+        "gender": "kids"
+      },
+      {
+        "content": "sportswear",
+        "type": "brand",
+        "gender": "kids"
+      },
+      {
+        "content": "best sellers",
+        "type": "is_best_sellers",
+        "gender": "kids"
+      }
+    ]
+  },
+  {
+    "style": "2",
+    "items": [
+      {
+        "title": "WHAT'S HOT",
+        "desc": "",
+        "n": 1,
+        "special": true,
+        "slides": [
+          {
+            "link": "#",
+            "img": "./images/Home/em-emc-terrex-oct-hp-tc-d.webP",
+            "titleSlide": "Terrex XPERIOR Jackets",
+            "descSlide": "Cold out? Grab these first."
+          },
+          {
+            "link": "#",
+            "img": "./images/Home/em-emc-softlux-hp-tc-d_1.webp",
+            "titleSlide": "SOFT LUX",
+            "descSlide": "Treat yourself to all-day softness and style."
+          },
+          {
+            "link": "#",
+            "img": "./images/Home/em-emc-terrex-hp-tc-d.webP",
+            "titleSlide": "SKYCHASER AX5 GTX",
+            "descSlide": "Made to do more."
+          },
+          {
+            "link": "#",
+            "img": "./images/Home/em-eg-simpsons-hp-tc-d.webP",
+            "titleSlide": "The Simpsons",
+            "descSlide": "Home is where fun lives."
+          },
+          {
+            "link": "#",
+            "img": "./images/Home/em-emc-terrex-oct-hp-tc-d.webP",
+            "titleSlide": "Optimé",
+            "descSlide": "Squat-Proof."
+          },
+          {
+            "link": "#",
+            "img": "./images/Home/em-emc-terrex-hp-tc-d.webP",
+            "titleSlide": "ADIDAS Z.N.E.",
+            "descSlide": "A team way of life."
+          }
+        ]
+      },
+      {
+        "title": "SELECT YOUR SPORT, FIND YOUR GEAR",
+        "desc": "",
+        "n": 1,
+        "special": true,
+        "slides": [
+          {
+            "link": "#",
+            "img": "./images/Home/em-emc-FOOTBALL-hp-tc-d.webP",
+            "titleSlide": "",
+            "descSlide": ""
+          },
+          {
+            "link": "#",
+            "img": "./images/Home/em-emc-TRAINING-hp-tc-d.webP",
+            "titleSlide": "",
+            "descSlide": ""
+          },
+          {
+            "link": "#",
+            "img": "./images/Home/em-emc-PADEL-hp-tc-d-n.webP",
+            "titleSlide": "",
+            "descSlide": ""
+          },
+          {
+            "link": "#",
+            "img": "./images/Home/em-emc-BASKETBALL-hp-tc-d.webP",
+            "titleSlide": "",
+            "descSlide": ""
+          },
+          {
+            "link": "#",
+            "img": "./images/Home/em-emc-FOOTBALL-hp-tc-d.webP",
+            "titleSlide": "",
+            "descSlide": ""
+          },
+          {
+            "link": "#",
+            "img": "./images/Home/em-emc-TRAINING-hp-tc-d.webP",
+            "titleSlide": "",
+            "descSlide": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "style": "3",
+    "items": [
+      {
+        "title": "COMPLETE THE LOOK",
+        "desc": "",
+        "n": 4,
+        "special": false
+      },
+      {
+        "title": "YOU MIGHT ALSO LIKE",
+        "desc": "",
+        "n": 4,
+        "special": false
+      },
+      {
+        "title": "OTHERS ALSO BOUGHT",
+        "desc": "",
+        "n": 4,
+        "special": false
+      },
+      {
+        "title": "Recently Viewed",
+        "desc": "",
+        "n": 4,
+        "special": false
+      }
+    ]
+  }
+]

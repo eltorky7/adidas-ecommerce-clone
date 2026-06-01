@@ -1,0 +1,700 @@
+@media (min-width: 2080px) {
+  header > nav.bottomNav .megaMenu > li > .level-2 > .list {
+    margin-left: 0 !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ad > div {
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+  }
+
+  .ad > div:first-child > h5 {
+    text-align: center;
+    padding-right: 4px;
+  }
+
+  .ad > div:last-child > h5 {
+    padding-left: 4.68vw;
+  }
+
+  header > .topNav {
+    display: flex;
+  }
+
+  header > nav.bottomNav .megaMenu > li > .level-2 > .list {
+    margin-left: -10vw;
+  }
+
+  .bottomNav > .miniMenu {
+    display: none;
+  }
+
+  header > nav.bottomNav > .boxLogo {
+    padding-left: 7px;
+  }
+
+  header > nav.bottomNav.active > .boxLogo > .logo {
+    width: 50px;
+  }
+
+  header > nav.bottomNav > .navContent > .search {
+    width: 200px;
+    height: 35px;
+    order: 1;
+    margin-bottom: 5px;
+  }
+
+  header > nav.bottomNav > .navContent > .search > .inSearch {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: inherit;
+    border-radius: 2px;
+    padding: 0 10px 0 12px;
+    background-color: #ebedee;
+    transition: box-shadow 0.3s;
+  }
+
+  header > nav.bottomNav > .navContent > .search > .inSearch:hover {
+    box-shadow:
+      0.5px 0.5px 0 0 rgb(27, 27, 27) inset,
+      -0.5px -0.5px 0 0 rgb(27, 27, 27) inset;
+  }
+
+  header > nav.bottomNav > .navContent > .search > .inSearch > input {
+    border: none;
+    outline: none;
+    font-size: 12px;
+    letter-spacing: 1px;
+    background-color: inherit;
+    color: #0000008e;
+    height: calc(100% - 2px);
+    font-family: var(--font-normal);
+  }
+
+  header > nav.bottomNav > .navContent > .search > .inSearch:has(input:focus) {
+    box-shadow:
+      0.5px 0.5px 0 0 rgb(27, 27, 27) inset,
+      -0.5px -0.5px 0 0 rgb(27, 27, 27) inset;
+  }
+
+  header > nav.bottomNav > .navContent > .search > .inSearch > span {
+    cursor: pointer;
+  }
+
+  header > nav.bottomNav > .navContent > .profile {
+    order: 2;
+    margin-top: 3px;
+  }
+
+  header > nav.bottomNav > .navContent > .addToWishlist {
+    display: block;
+    order: 3;
+    padding-top: 3px;
+  }
+
+  header > nav.bottomNav > .navContent > .addToBag {
+    order: 4;
+  }
+}
+
+@media (max-width: 1199px) {
+  .ad > div {
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+  }
+
+  .ad > div:first-child > h5 {
+    text-align: center;
+    padding-right: 4px;
+  }
+
+  .ad > div:last-child > h5 {
+    padding-left: 31px;
+  }
+
+  /** ================ { topNav } ================ */
+  header > .topNav {
+    display: none;
+  }
+  /** ================ { topNav } ================ */
+
+  header > nav.bottomNav > .boxLogo {
+    margin-right: 15px;
+  }
+
+  /** ================ { bottomNav } ================ */
+  /*! Mini Menu Start */
+  .bottomNav > .miniMenu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+
+  /*? =-=-=-=- Menu {Level 1} =-=-=-==- */
+  .bottomNav > .miniMenu > .menu > button {
+    border: none;
+    width: 25px;
+    height: 14px;
+    background-color: transparent;
+    position: relative;
+    margin-right: 10px;
+  }
+
+  .bottomNav > .miniMenu > .menu > button > span {
+    display: block;
+    height: 2px;
+    background-color: var(--text-color);
+  }
+
+  .bottomNav > .miniMenu > .menu > button > span::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    top: 0;
+    left: 0;
+    background-color: var(--text-color);
+  }
+
+  .bottomNav > .miniMenu > .menu > button > span::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--text-color);
+  }
+
+  .clean {
+    position: fixed;
+    display: none;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+    background-color: var(--text-color);
+    opacity: 0.5;
+    height: 100%;
+    width: 100%;
+  }
+
+  .boxMenu {
+    display: none;
+    position: fixed;
+    width: 50vw;
+    height: 100dvh;
+    background-color: var(--bg-color);
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    overflow-y: auto;
+  }
+
+  .boxMenu > .topMenu {
+    text-align: center;
+    position: relative;
+    padding: 10px 0;
+    box-shadow: 0px -1.2px 0px 0 #eaeeef inset;
+  }
+
+  .boxMenu > .topMenu > button.back {
+    transform: translate(-200%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    width: 50px;
+    height: 50px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .boxMenu > .topMenu > button.back.active {
+    transform: translate(0, -50%);
+  }
+
+  .boxMenu > .topMenu > button.back:after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 6.2px + 3px);
+    right: 25px;
+    width: 10px;
+    height: 2.4px;
+    background-color: var(--text-color);
+    transform: translateY(-50%) rotateZ(-40deg);
+  }
+
+  .boxMenu > .topMenu > button.back::before {
+    content: "";
+    position: absolute;
+    top: calc(50% + 3px);
+    right: 25px;
+    width: 10px;
+    height: 2.4px;
+    background-color: var(--text-color);
+    transform: translateY(-50%) rotateZ(40deg);
+  }
+
+  .boxMenu > .topMenu > img {
+    width: 60px;
+  }
+
+  .boxMenu > .topMenu > .btnCloseMenu {
+    position: absolute;
+    border: none;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background-color: transparent;
+  }
+
+  .boxMenu > .topMenu > .btnCloseMenu:disabled {
+    color: var(--text-color);
+  }
+
+  .boxMenu > .topMenu > .btnCloseMenu > i {
+    font-size: 30px;
+  }
+
+  .level {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    padding-top: 10px;
+    height: 110%;
+    background-color: var(--bg-color);
+  }
+
+  .boxMenu > .level.active {
+    transform: translateX(0%);
+    z-index: 5;
+  }
+
+  .boxMenu > .level-one {
+    height: calc(100% - 63.78px);
+  }
+
+  .boxMenu > .level-one > .bodyMenu > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    height: 55px;
+    font-family: var(--font-normal);
+    font-weight: 400;
+    text-transform: uppercase;
+    padding-left: 30px;
+    padding-right: 10px;
+    font-size: 22px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    transform: scale(1);
+    -webkit-tap-highlight-color: transparent;
+
+    letter-spacing: 2px;
+    font-family: var(--font-normal);
+    color: rgba(0, 0, 0, 0.815);
+  }
+
+  .boxMenu > .level-one > .bodyMenu > div:active {
+    transform: scale(0.95);
+  }
+
+  .boxMenu > .level-one > .bodyMenu > div.bold {
+    font-family: var(--font-bold);
+    font-weight: bold;
+    letter-spacing: 3px;
+  }
+
+  .boxMenu > .level-one > .footMenu {
+    margin-bottom: calc(55px / 3);
+  }
+
+  .boxMenu > .level-one > .footMenu > .top,
+  .boxMenu > .level-one > .footMenu > .bottom {
+    box-shadow: 0px 1.2px 0px 0 #eaeeef inset;
+    padding: 10px 0;
+  }
+
+  .boxMenu > .level-one > .footMenu > .top {
+    margin-top: 10px;
+  }
+
+  .boxMenu > .level-one > .footMenu > .top > h4,
+  .boxMenu > .level-one > .footMenu > .bottom > h4 {
+    height: 50px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    padding-left: 30px;
+    font-family: var(--font-normal);
+    font-weight: 400;
+    letter-spacing: 2px;
+    font-size: 18px;
+    cursor: pointer;
+    transform: scale(1);
+
+    transition: transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .boxMenu > .level-one > .footMenu > .bottom > h4:active,
+  .boxMenu > .level-one > .footMenu > .top > h4:active {
+    transform: scale(0.95);
+  }
+  .boxMenu .options {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 91px;
+    display: flex;
+    background-color: var(--bg-color);
+    box-shadow: 0 1.2px 0 0 #eaeeef inset;
+  }
+
+  .boxMenu .options > .country,
+  .boxMenu .options > .lang {
+    flex: 1;
+    height: 100%;
+    padding: 20px 0 0 20px;
+  }
+
+  .boxMenu .options > .country {
+    box-shadow: 1.2px 0 0 0 #eaeeef;
+  }
+
+  .boxMenu .options > .country > h4,
+  .boxMenu .options > .lang > h4 {
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-family: sans-serif;
+    font-weight: 100;
+  }
+
+  .boxMenu .options > .lang {
+    position: relative;
+  }
+
+  .boxMenu .options > .country > div {
+    display: flex;
+  }
+
+  .boxMenu .options > .lang::before {
+    content: "";
+    position: absolute;
+    top: calc(50% - 9px);
+    right: 40px;
+    width: 10px;
+    height: 2.4px;
+    background-color: var(--text-color);
+    transform: translateY(-50%) rotateZ(-40deg);
+  }
+
+  .boxMenu .options > .lang::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 15px);
+    right: 40px;
+    width: 10px;
+    height: 2.4px;
+    background-color: var(--text-color);
+    transform: translateY(-50%) rotateZ(40deg);
+  }
+
+  .boxMenu .options > .country > div > img {
+    width: 24px;
+    margin-right: 4px;
+  }
+
+  .boxMenu .options > .country > div > h5,
+  .boxMenu .options > .lang > h5 {
+    font-size: 15px;
+    letter-spacing: 0px;
+    font-family: sans-serif;
+    font-weight: bold;
+    padding-top: 3px;
+  }
+  /*? =-=-=-=- Menu {Level 1} =-=-=-==- */
+
+  /*? =-=-=-=- Menu {Level 2} =-=-=-==- */
+  .level-two,
+  .level-three,
+  .level-four {
+    position: absolute;
+    top: 63.78px;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .level-three > span,
+  .level-four > span {
+    font-size: 20px !important;
+    letter-spacing: 0px !important;
+    text-transform: capitalize !important;
+  }
+
+  .level-three a,
+  .level-four a {
+    letter-spacing: 1px !important;
+  }
+
+  .level-four h4.go {
+    padding-bottom: 10px !important;
+  }
+
+  .level > div > h4 {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 30px;
+    padding-right: 10px;
+    font-family: var(--font-normal);
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-size: clamp(1px, calc(100% + 1.1rem), 19px);
+    position: relative;
+    cursor: pointer;
+    transition:
+      transform 0.1s,
+      opacity 0.1s;
+    transform: scale(1, 1.1);
+    -webkit-tap-highlight-color: transparent;
+    color: #000000bd;
+  }
+
+  .level > div > h4 > img {
+    padding-left: 10px;
+  }
+
+  .level:not(.level-one) > div h4:hover {
+    opacity: 0.7;
+  }
+
+  .level > div > h4 > a {
+    padding-bottom: 10px;
+    letter-spacing: 2px;
+  }
+
+  .level > div > h4:active,
+  .level span:active {
+    transform: scale(0.95);
+  }
+
+  .level > span {
+    font-family: var(--font-bold);
+    font-weight: bold;
+    letter-spacing: 3px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    height: 55px;
+    text-transform: uppercase;
+    padding-left: 30px;
+    font-size: 22px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    transform: scale(1);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /*? =-=-=-=- Menu {Level 2} =-=-=-==- */
+
+  .bottomNav > .miniMenu > span {
+    padding: 8px 10px;
+    margin-left: 10px;
+  }
+
+  .bottomNav > .miniMenu > span > img {
+    height: 24px;
+    width: 24px;
+  }
+  /*! Mini Menu End */
+
+  header > nav.bottomNav.active img.logo {
+    width: 60px;
+  }
+
+  header > nav.bottomNav .megaMenu {
+    display: none;
+  }
+
+  header > nav.bottomNav > .navContent {
+    height: 100%;
+    column-gap: 35px;
+  }
+
+  header > nav.bottomNav > .navContent > .search {
+    width: 0;
+    height: 100%;
+    order: 2;
+    position: relative;
+  }
+
+  header > nav.bottomNav > .navContent > .search > .inSearch:hover {
+    box-shadow: none;
+  }
+
+  header > nav.bottomNav > .navContent > .search > .inSearch > input {
+    display: none;
+  }
+
+  header > nav.bottomNav > .navContent > .search > .inSearch > span {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-bottom: 4px;
+  }
+
+  header > nav.bottomNav > .logo {
+    padding: 0;
+    padding-right: 20px;
+  }
+
+  header > nav.bottomNav > .navContent > .profile {
+    order: 1;
+    margin-top: 3px;
+  }
+
+  header > nav.bottomNav > .navContent > .addToBag {
+    order: 3;
+  }
+
+  header > nav.bottomNav > .navContent > .addToWishlist {
+    display: none;
+    padding-top: 3px;
+  }
+  /** ================ { bottomNav } ================ */
+
+  /** ================ { MAIN } ================ */
+  main > #view-home > .experience-component > .full-width {
+    height: calc(100vh - 60px);
+    width: 100%;
+    position: relative;
+  }
+}
+
+@media (max-width: 800px) {
+  .ad > div {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .ad > div {
+    flex: 1;
+  }
+
+  .ad > div > h5 {
+    text-align: center;
+  }
+
+  .ad > div:first-child > h5 {
+    padding-right: 0;
+  }
+
+  .ad > div:last-child > h5 {
+    width: 100%;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .ad {
+    align-items: center;
+    height: 42px;
+  }
+
+  .ad > div > h5 {
+    font-size: clamp(6px, calc(2.4vw + 0.1rem), 13px);
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  header > nav.bottomNav > .logo {
+    padding: 0;
+    padding-right: 10px;
+  }
+
+  header > nav.bottomNav > .boxLogo {
+    display: flex;
+    justify-content: center;
+  }
+
+  header
+    > nav.bottomNav
+    .level:not(.level-one)
+    div
+    img:not([alt="arrow_forward"]) {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  header > nav.bottomNav > .boxLogo {
+    margin-right: 0;
+  }
+
+  .boxMenu > .level-one > .options > .lang::before {
+    top: calc(50% - 9px);
+    right: 20px;
+  }
+
+  .boxMenu > .level-one > .options > .lang::after {
+    top: calc(50% - 15px);
+    right: 20px;
+  }
+
+  header > nav.bottomNav > .navContent > .profile {
+    margin-top: 1px;
+  }
+}
+
+@media (max-width: 600px) {
+  .boxMenu > .level-one > .options > .lang::before {
+    top: calc(50% - 9px);
+    right: 10px;
+  }
+
+  .boxMenu > .level-one > .options > .lang::after {
+    top: calc(50% - 15px);
+    right: 10px;
+  }
+
+  header > nav.bottomNav > .navContent > .search > .inSearch > span {
+    padding-bottom: 7.5px;
+  }
+}
+
+@media (max-width: 545px) {
+  .boxMenu {
+    width: 100vw;
+  }
+  .boxMenu > .level-one > .options > .lang::before {
+    top: calc(50% - 9px);
+    right: 40px;
+  }
+
+  .boxMenu > .level-one > .options > .lang::after {
+    top: calc(50% - 15px);
+    right: 40px;
+  }
+
+  header > nav.bottomNav > .navContent {
+    column-gap: 32px;
+  }
+}
+
+@media (min-height: 973px) {
+  .boxMenu .options {
+    position: absolute;
+  }
+}

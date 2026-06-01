@@ -1,0 +1,83 @@
+{
+  "sale": {
+    "title": "SALE",
+    "description": "Shop the latest items on sale.",
+    "breadcrumbs": [
+      {
+        "title": "sale",
+        "href": "#sale"
+      }
+    ],
+    "theme": {
+      "backgroundColor": "#e51c24",
+      "textColor": "#ffffff"
+    },
+    "promotionalBanner": {
+      "hasBanner": true,
+      "cards": [
+        {
+          "img": "./images/sale-men.jpg",
+          "title": "MEN",
+          "url": "#shop/sale/men"
+        },
+        {
+          "img": "./images/sale-women.jpg",
+          "title": "WOMEN",
+          "url": "#shop/sale/women"
+        }
+      ]
+    }
+  },
+  "new": {
+    "title": "NEW ARRIVALS",
+    "description": "",
+    "breadcrumbs": [
+      {
+        "title": "new",
+        "href": "#new-arrivals"
+      }
+    ],
+    "theme": {
+      "backgroundColor": "#e2f1f4",
+      "textColor": "#000000"
+    },
+    "promotionalBanner": {
+      "hasBanner": true,
+      "cards": [
+        {
+          "img": "./images/new-men.jpg",
+          "title": "MEN",
+          "url": "#shop/new/men"
+        },
+        {
+          "img": "./images/new-women.jpg",
+          "title": "WOMEN",
+          "url": "#shop/new/women"
+        },
+        {
+          "img": "./images/new-kids.jpg",
+          "title": "KIDS",
+          "url": "#shop/new/kids"
+        }
+      ]
+    }
+  },
+  "shoes": {
+    "title": "Shoes",
+    "description": "Step into the best footwear.",
+    "breadcrumbs": [
+      {
+        "title": "shoes",
+        "href": "#shoes"
+      }
+    ],
+    "theme": {
+      "backgroundColor": "transparent",
+      "textColor": "#000000"
+    },
+    "promotionalBanner": {
+      "hasBanner": false,
+      "cards": []
+    }
+  }
+}

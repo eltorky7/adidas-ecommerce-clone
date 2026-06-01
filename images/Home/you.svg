@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="18px" viewBox="0 0 24 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icons/Social/YouTube</title>
+    <defs>
+        <polygon id="path-1" points="0 0 23.9999 0 23.9999 16.911 0 16.911"></polygon>
+    </defs>
+    <g id="MVP1-Reloaded" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Homepage" transform="translate(-1138.000000, -3814.000000)">
+            <g id="Icons/Social/YouTube" transform="translate(1138.000000, 3811.000000)">
+                <polygon id="Fill-1" points="0 24 24 24 24 0 0 0"></polygon>
+                <g id="Group-7" transform="translate(0.000100, 3.544500)">
+                    <g id="Group-4">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="Clip-3"></g>
+                        <path d="M23.498,2.641 C23.223,1.602 22.409,0.784 21.377,0.505 C19.505,0 12,0 12,0 C12,0 4.495,0 2.623,0.505 C1.591,0.784 0.777,1.602 0.501,2.641 C0,4.525 0,8.455 0,8.455 C0,8.455 0,12.386 0.501,14.27 C0.777,15.309 1.591,16.127 2.623,16.406 C4.495,16.911 12,16.911 12,16.911 C12,16.911 19.505,16.911 21.377,16.406 C22.409,16.127 23.223,15.309 23.498,14.27 C24,12.386 24,8.455 24,8.455 C24,8.455 24,4.525 23.498,2.641" id="Fill-2" fill="#FFFFFF" mask="url(#mask-2)"></path>
+                    </g>
+                    <polygon id="Fill-5" fill="#000000" points="9.5449 12.0239 15.8179 8.4559 9.5449 4.8869"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
