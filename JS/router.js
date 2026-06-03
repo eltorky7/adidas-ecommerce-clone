@@ -46,6 +46,7 @@ export class Router {
     this.appElement = document.getElementById(this.config.containerId);
 
     this.scrollTimeout = null;
+    this.currentPageInstance = null;
     this.#init();
   }
 
@@ -84,6 +85,13 @@ export class Router {
   }
 
   async router() {
+    if (
+      this.currentPageInstance &&
+      typeof this.currentPageInstance.unmount === "function"
+    ) {
+      this.currentPageInstance.unmount();
+    }
+
     //* 1. اختبار الرابط الحالي مع كل الروابط المسجلة
     const potentialMatches = this.routes.map((route) => {
       return {
@@ -106,6 +114,8 @@ export class Router {
     //* 4. وعرضه View تهيئة الـ
     const view = new match.route.view(RouterHelper.getParams(match));
     this.appElement.innerHTML = await view.getHtml();
+
+    this.currentPageInstance = view;
     if (typeof view.mount === "function") await view.mount();
   }
 

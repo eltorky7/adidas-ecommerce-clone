@@ -1,6 +1,5 @@
 import { AbstractView } from "/JS/pages/abstract-view.js";
-import { Cart } from "/JS/store/cart/cart.js";
-import { myBagInstance } from "/JS/store/cart/my-bag.js";
+import { cartInstance } from "/JS/store/cart/cart.js";
 
 class Config {
   static get load() {
@@ -126,6 +125,27 @@ export class CartView extends AbstractView {
   }
 
   mount() {
-    new Cart(myBagInstance);
+    cartInstance.run();
+  }
+
+  unmount() {
+    window.removeEventListener(
+      "clickPromoUser",
+      cartInstance.boundResetPromoCode,
+    );
+
+    if (cartInstance.wishlistChannelListener) {
+      cartInstance.wishlistChannelListener.close();
+      cartInstance.wishlistChannelListener = null;
+    }
+
+    if (cartInstance.sync) {
+      cartInstance.sync.close();
+      cartInstance.sync = null;
+    }
+
+    if (cartInstance.ui && typeof cartInstance.ui.destroy === "function") {
+      cartInstance.ui.destroy();
+    }
   }
 }
