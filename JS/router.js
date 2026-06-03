@@ -75,6 +75,7 @@ export class Router {
       if (targetLink) {
         e.preventDefault();
         this.navigateTo(targetLink.href);
+        this.applyScrolled(true);
       }
     });
 
@@ -117,9 +118,9 @@ export class Router {
     this.router();
   }
 
-  applyScrolled() {
+  applyScrolled(isDefault) {
     const savedPosition = sessionStorage.getItem(`scroll_${location.pathname}`);
-    if (savedPosition) {
+    if (savedPosition && !isDefault) {
       // لو كان ليه سكرول محفوظ، ننزله للمكان ده فوراً
       setTimeout(() => {
         window.scrollTo({
