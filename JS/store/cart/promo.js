@@ -34,7 +34,7 @@ export class PromoStorage {
   }
 
   loadSummary() {
-    return JSON.parse(localStorage.getItem(this.keySummary)) || {};
+    return JSON.parse(localStorage.getItem(this.keySummary)) || null;
   }
 
   saveSummary(data) {

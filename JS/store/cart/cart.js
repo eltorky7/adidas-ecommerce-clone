@@ -1,6 +1,7 @@
 import { MobileGallery } from "/JS/pages/product-page/product-components.js";
 import { UIHelper, Products } from "/JS/components/helpers.js";
 import { wishlistInstance } from "/JS/store/wishlist/wishlist.js";
+import { myBagInstance } from "/JS/store/cart/my-bag.js";
 import {
   PromoStorage,
   PromoStore,
@@ -183,6 +184,9 @@ class CartUI {
     onApplyPromoCode,
     onCheckout,
     onClickBtnEdit,
+    onclickPromoUser,
+    getActivePromoCode,
+    applyValidPromoState,
   }) {
     this.onQtyChange = onQtyChange;
     this.onRemove = onRemove;
@@ -190,6 +194,9 @@ class CartUI {
     this.onApplyPromoCode = onApplyPromoCode;
     this.onCheckout = onCheckout;
     this.onClickBtnEdit = onClickBtnEdit;
+    this.onclickPromoUser = onclickPromoUser;
+    this.getActivePromoCode = getActivePromoCode;
+    this.applyValidPromoState = applyValidPromoState;
 
     this.containerCart = document.getElementById("containerCart");
     this.containerItems = document.getElementById("viewCarts");
@@ -220,7 +227,7 @@ class CartUI {
     this.bindCartEvents();
   }
 
-  renderSummary(data, count, discountAmount = 0) {
+  renderSummary(summary, count, discountAmount = 0) {
     if (!this.isAllFoundContainers || count <= 0) return;
 
     const [itemsCountOne, itemsCountTwo] = document.querySelectorAll(
@@ -232,21 +239,52 @@ class CartUI {
     const totalPr = document.querySelector(
       ".total-price-container .price-value",
     );
+
     const formPromo = document.getElementById("formPromoCode");
     const checkoutBtn = document.getElementById("checkoutBtn");
+    const promoContainer = document.querySelector(".container-promo-user");
+    const promoInput = document.querySelector(`input[name="promoCode"]`);
 
     itemsCountOne.innerText = count;
     itemsCountTwo.innerText = count;
 
     if (!subTotal || !delivePr || !totalPr) return;
 
-    subTotal.textContent = `${data.currency} ${UIHelper.getLocalPrice(data.subTotal)}`;
-    delivePr.textContent = `${data.delivery > 0 ? `${data.currency} ${UIHelper.getLocalPrice(data.delivery)}` : "Free"}`;
-    totalPr.textContent = `${data.currency} ${UIHelper.getLocalPrice(data.total - discountAmount)}`;
+    subTotal.textContent = `${summary.currency} ${UIHelper.getLocalPrice(summary.subTotal)}`;
+    delivePr.textContent = `${summary.delivery > 0 ? `${summary.currency} ${UIHelper.getLocalPrice(summary.delivery)}` : "Free"}`;
+    totalPr.textContent = `${summary.currency} ${UIHelper.getLocalPrice(summary.total - discountAmount)}`;
+
+    this.initPromoReadUser(promoContainer, promoInput);
 
     formPromo.onsubmit = this.onApplyPromoCode;
-
     checkoutBtn.onclick = this.onCheckout;
+  }
+
+  initPromoReadUser(container, input) {
+    container.innerHTML = ``;
+
+    const code = this.getActivePromoCode();
+    if (!code) return;
+
+    const containerPromoUser = document.createElement("div");
+    containerPromoUser.className = `promo-user`;
+
+    const buttonPromoUser = document.createElement("button");
+    buttonPromoUser.id = `cancelPromoUser`;
+    buttonPromoUser.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+
+    const codePromoUser = document.createElement("span");
+    codePromoUser.id = `promoUserValue`;
+    codePromoUser.textContent = code;
+
+    containerPromoUser.onclick = (event) => {
+      this.onclickPromoUser(event, input);
+    };
+
+    this.applyValidPromoState(input);
+
+    containerPromoUser.append(buttonPromoUser, codePromoUser);
+    container.append(containerPromoUser);
   }
 
   handleRenderItems(items) {
@@ -477,6 +515,10 @@ class CartSync {
 
   broadcast(data) {
     this.channel.postMessage(data);
+  }
+
+  close() {
+    this.channel.close();
   }
 }
 
@@ -736,6 +778,8 @@ class CartUIEventsHandler {
       onclickPromoUser: this.onclickPromoUser.bind(this),
       onCheckout: this.onCheckout.bind(this),
       onClickBtnEdit: this.onClickBtnEdit.bind(this),
+      getActivePromoCode: this.getActivePromoCode.bind(this),
+      applyValidPromoState: this.applyValidPromoState.bind(this),
     };
   }
 
@@ -757,14 +801,8 @@ class CartUIEventsHandler {
   onRemove(id) {
     this.cart.serviceCart.updateQuantity(id, 0);
     this.syncPromoCode();
+
     this.cart.render(true, "on-remove");
-  }
-
-  onToggleWishList(isActive, sku) {
-    const currItem = this.cart.serviceCart.getItem(sku);
-    this.cart.wishlistInstance.toggleFromCart(currItem, isActive);
-
-    this.cart.render(false, "on-Add-Wishlist");
   }
 
   onApplyPromoCode(event) {
@@ -773,43 +811,20 @@ class CartUIEventsHandler {
     if (!this.states.submitPromo) return;
 
     const input = event.target.querySelector(`input[name="promoCode"]`); //* Input Promo
-    const promoUser = event.target.querySelector(".container-promo-user"); //* Container Read Promo Code
-    const cartTotal = this.cart.serviceCart.calculateSummary().total; //* Total Price
+    const totalPrice = this.cart.serviceCart.calculateSummary().total; //* Total Price
     const user = this.cart.storagePromo.loadUser(); //* User Id (Login)
     const value = this.cart.servicePromo.validateCode(
       input.value,
-      cartTotal,
+      totalPrice,
       user,
     ); //* Result Promo Value
-    const discountAmount = this.cart.servicePromo.calculateDiscount(
-      value,
-      cartTotal,
-    ); //* Discount Price
 
-    this.checkValidValue(input, value.valid);
+    this.checkValidValue(input, value);
+    this.updatePromoSummary(value, totalPrice);
 
     input.oninput = () => {
       input.classList.remove("warning");
     };
-
-    promoUser.innerHTML = ``;
-
-    if (value.valid) {
-      UIHelper.popupQuickMsg("Correct Promo Code", "rgba(46, 139, 86, 0.69)");
-
-      this.cart.storagePromo.saveSummary({
-        subTotal: cartTotal,
-        appliedPromoCode: value.promo.code,
-        discountAmount: discountAmount,
-        total: cartTotal - discountAmount,
-        user: this.cart.storagePromo.loadUser(),
-      });
-
-      this.initPromoReadUser(promoUser, input, value);
-    } else {
-      UIHelper.popupQuickMsg(value.message, "rgba(220, 20, 60, 0.73)");
-      this.cart.storagePromo.saveSummary({});
-    }
 
     this.cart.storePromo.setSummary(this.cart.storagePromo.loadSummary());
     this.cart.render(true, "On Apply PromoCode");
@@ -827,10 +842,9 @@ class CartUIEventsHandler {
 
     this.cart.storagePromo.save(this.cart.storePromo.promos);
 
-    if (isValid) this.cart.storagePromo.saveSummary(finalSummary);
-    else this.cart.storagePromo.saveSummary({});
-
+    this.cart.storagePromo.saveSummary(isValid ? finalSummary : null);
     this.cart.storePromo.setSummary(this.cart.storagePromo.loadSummary());
+
     this.cart.serviceCart.updateQtyProducts();
 
     this.cart.storeCart.clearItems();
@@ -866,6 +880,17 @@ class CartUIEventsHandler {
       dataCartItem: curr,
       dataProduct: objCurr,
     });
+  }
+
+  onToggleWishList(isActive, sku) {
+    const currItem = this.cart.serviceCart.getItem(sku);
+    this.cart.wishlistInstance.toggleFromCart(currItem, isActive);
+
+    this.cart.render(false, "on-Add-Wishlist");
+  }
+
+  getActivePromoCode() {
+    return this.cart.storagePromo.loadSummary()?.code;
   }
 
   //*=========={Edit Events}============
@@ -928,14 +953,25 @@ class CartUIEventsHandler {
   }
 
   //*-=-=-=-=-=-- { Helpers } -=-=-=-=-=--
-  checkValidValue(input, isValid) {
+  checkValidValue(input, value) {
+    const { valid: isValid, message } = value;
+
     input.classList.toggle("warning", !isValid);
 
     if (isValid) {
       input.value = ``;
       input.disabled = true;
       this.states.submitPromo = false;
-    } else input.focus();
+      UIHelper.popupQuickMsg("Correct Promo Code", "rgba(46, 139, 86, 0.69)");
+    } else {
+      input.focus();
+      UIHelper.popupQuickMsg(message, "rgba(220, 20, 60, 0.73)");
+    }
+  }
+
+  applyValidPromoState(input) {
+    input.disabled = true;
+    this.states.submitPromo = false;
   }
 
   onclickPromoUser(event, input) {
@@ -950,61 +986,63 @@ class CartUIEventsHandler {
     window.dispatchEvent(new Event("clickPromoUser"));
   }
 
-  initPromoReadUser(promoUser, input, value) {
-    const containerPromoUser = document.createElement("div");
-    containerPromoUser.className = `promo-user`;
-
-    const buttonPromoUser = document.createElement("button");
-    buttonPromoUser.id = `cancelPromoUser`;
-    buttonPromoUser.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
-
-    const codePromoUser = document.createElement("span");
-    codePromoUser.id = `promoUserValue`;
-    codePromoUser.textContent = value.promo.code;
-
-    containerPromoUser.onclick = (event) => {
-      this.onclickPromoUser(event, input);
-    };
-
-    containerPromoUser.append(buttonPromoUser, codePromoUser);
-    promoUser.append(containerPromoUser);
-  }
-
   syncPromoCode() {
     const summary = this.cart.storePromo.summary;
-    const code = summary.appliedPromoCode;
+    if (!summary) return;
+
+    const code = summary.code;
+    const totalPrice = this.cart.serviceCart.calculateSummary().total; //* Total Price
     const user = this.cart.storagePromo.loadUser();
 
-    if (!code || !user) {
+    const value = this.cart.servicePromo.validateCode(code, totalPrice, user); //* Result Promo Value
+
+    if (!value.valid) {
       this.cart.resetPromoCode();
       return;
     }
 
-    const cartTotal = this.cart.serviceCart.calculateSummary().total; //* Total Price
-    const value = this.cart.servicePromo.validateCode(code, cartTotal, user); //* Result Promo Value
-
     const discountAmount = this.cart.servicePromo.calculateDiscount(
       value,
-      cartTotal,
+      totalPrice,
     ); //* Discount Price
 
     const newSummary = {
-      appliedPromoCode: "TURKY20",
+      code,
       discountAmount: discountAmount,
-      subTotal: cartTotal,
-      total: cartTotal - discountAmount,
-      user: "userId_6320131004",
+      subTotal: totalPrice,
+      total: totalPrice - discountAmount,
+      user,
     };
 
     this.cart.storagePromo.saveSummary(newSummary);
     this.cart.storePromo.setSummary(newSummary);
+  }
+
+  updatePromoSummary(value, totalPrice) {
+    const discAmount = this.cart.servicePromo.calculateDiscount(
+      value,
+      totalPrice,
+    ); //* Discount Price
+
+    if (value.valid) {
+      this.cart.storagePromo.saveSummary({
+        subTotal: totalPrice,
+        code: value.promo.code,
+        discountAmount: discAmount,
+        total: totalPrice - discAmount,
+        user: this.cart.storagePromo.loadUser(),
+      });
+    } else {
+      this.cart.storagePromo.saveSummary(null);
+    }
   }
 }
 
 export class Cart {
   constructor(myBagInstance) {
     this.myBag = myBagInstance;
-    this.#init();
+    this.boundResetPromoCode = this.resetPromoCode.bind(this);
+    this.run = this.#init;
   }
 
   async #init() {
@@ -1020,7 +1058,7 @@ export class Cart {
     //*=========================
     //*==== Init Promo
     //*=========================
-    this.initComponentsPromo();
+    await this.initComponentsPromo();
 
     //*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -1029,9 +1067,7 @@ export class Cart {
     this.myBag.triggerGlobalCheckout = this.ui.onCheckout; //!
 
     this.initSyncCart();
-    this.resetPromoCode();
     this.initSyncWishlist();
-
     this.render(false, "Global");
   }
 
@@ -1039,7 +1075,7 @@ export class Cart {
     //* console.log(msg);
     if (!UIHelper.getPageURL(["cart"])) return;
 
-    const discAmount = this.storePromo.summary.discountAmount || 0;
+    const discAmount = this.storePromo.summary?.discountAmount || 0;
     const count = this.serviceCart.getCount();
     const summary = this.serviceCart.calculateSummary();
 
@@ -1073,6 +1109,12 @@ export class Cart {
     //* (Save & Set) Promo Codes
     this.storagePromo.save(this.promos);
     this.storePromo.setPromos(this.promos);
+
+    const { total } = this.serviceCart.calculateSummary();
+    this.updatePromoSummary(this.storagePromo.loadSummary(), total);
+
+    //* Get Active Promo
+    this.storePromo.setSummary(this.storagePromo.loadSummary());
   }
 
   initCartItems() {
@@ -1082,15 +1124,13 @@ export class Cart {
   }
 
   initEventsCart() {
-    //* On Click Promo User
-    this.boundResetPromoCode = this.resetPromoCode.bind(this);
     window.removeEventListener("clickPromoUser", this.boundResetPromoCode);
     window.addEventListener("clickPromoUser", this.boundResetPromoCode);
   }
 
   initSyncWishlist() {
-    const wishlistChannelListener = new BroadcastChannel("wishlist_channel");
-    wishlistChannelListener.onmessage = ({ data }) => {
+    this.wishlistChannelListener = new BroadcastChannel("wishlist_channel");
+    this.wishlistChannelListener.onmessage = ({ data }) => {
       if (data.type === "CHANGE_CURRENT_ITEM") {
         this.render(false, "BroadCast-wishlist");
       }
@@ -1103,7 +1143,7 @@ export class Cart {
 
       this.storeCart.setItem(this.serviceCart.initItems(data.cart));
       this.storePromo.setPromos(data.promos);
-      this.storePromo.setSummary(data.summary);
+      this.storePromo.setSummary(data.summary || null);
       this.render(false, "BroadCast-Cart");
     });
   }
@@ -1121,8 +1161,42 @@ export class Cart {
   }
 
   resetPromoCode(isInit = {}) {
-    this.storePromo.setSummary({});
-    this.storagePromo.saveSummary({});
+    this.storagePromo.saveSummary(null);
+    this.storePromo.setSummary(null);
     if (isInit.type === "clickPromoUser") this.render();
   }
+
+  updatePromoSummary(summary, totalPrice) {
+    const user = this.storagePromo.loadUser();
+
+    if (!summary || !user) {
+      this.resetPromoCode();
+      return;
+    }
+
+    const valuePromo = this.servicePromo.validateCode(
+      summary.code,
+      totalPrice,
+      user,
+    );
+
+    const discAmount = this.servicePromo.calculateDiscount(
+      valuePromo,
+      totalPrice,
+    ); //* Discount Price
+
+    if (valuePromo.valid) {
+      this.storagePromo.saveSummary({
+        subTotal: totalPrice,
+        code: valuePromo.promo.code,
+        discountAmount: discAmount,
+        total: totalPrice - discAmount,
+        user,
+      });
+    } else {
+      this.storagePromo.saveSummary(null);
+    }
+  }
 }
+
+export const cartInstance = new Cart(myBagInstance);
