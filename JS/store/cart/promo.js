@@ -148,9 +148,10 @@ export class PromoService {
     return Math.min(cartTotal, discountAmount);
   }
 
-  checkoutValidate({ appliedPromoCode: code, user, cartTotal }) {
-    if (!code || !user || !cartTotal) return;
+  checkoutValidate(summary) {
+    if (!summary) return;
 
+    const { code, cartTotal, user } = summary;
     const isValid = this.validateCode(code, cartTotal, user).valid;
 
     if (isValid) {
