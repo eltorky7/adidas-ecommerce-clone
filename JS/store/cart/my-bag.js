@@ -22,6 +22,8 @@ export class MyBag {
     this.channelCart = new BroadcastChannel("cart_channel");
 
     this.bagIconBtn.onclick = this.onclickBtnBagIcon.bind(this);
+    this.handleAsideCheckoutClick = this.handleAsideCheckoutClick.bind(this);
+    this.handleExitClick = this.updateAsideCartUi.bind(this);
 
     this.updateCartItemsReadOnly();
 
@@ -717,23 +719,30 @@ export class MyBag {
 
   eventsAsideCart() {
     const btnExitAsideCart = document.getElementById(`asideCartExitBtn`);
-
     const asideCheckoutBtn = document.getElementById(`asideCheckoutBtn`); // حط الـ ID الصح بتاع الزرار عندك
 
     if (asideCheckoutBtn) {
-      asideCheckoutBtn.onclick = () => {
-        // نتأكد إن الميزة دي اتعملت من كلاس الـ Cart
-        if (typeof this.triggerGlobalCheckout === "function") {
-          this.triggerGlobalCheckout();
-
-          // ممكن تقفل الـ Aside Cart هنا لو حابب
-          this.updateAsideCartUi();
-        }
-      };
+      asideCheckoutBtn.removeEventListener(
+        "click",
+        this.handleAsideCheckoutClick,
+      );
+      asideCheckoutBtn.addEventListener(
+        "click",
+        this.handleAsideCheckoutClick,
+        { passive: true },
+      );
     }
-    btnExitAsideCart.onclick = this.updateAsideCartUi.bind(this);
+
+    if (btnExitAsideCart) btnExitAsideCart.onclick = this.handleExitClick;
 
     this.reRenderAllItems();
+  }
+
+  handleAsideCheckoutClick() {
+    const asideCheckoutEvent = new Event("aside-cart-checkout");
+    window.dispatchEvent(asideCheckoutEvent);
+
+    this.updateAsideCartUi();
   }
 
   onClickLinksCartItem(ite) {

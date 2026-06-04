@@ -236,7 +236,7 @@ class CartUI {
 
     const subTotal = document.querySelector(".subtotal-container .price-value");
     const delivePr = document.querySelector(".delivery-container .price-value");
-    const totalPr = document.querySelector(
+    const totalPrice = document.querySelector(
       ".total-price-container .price-value",
     );
 
@@ -248,16 +248,24 @@ class CartUI {
     itemsCountOne.innerText = count;
     itemsCountTwo.innerText = count;
 
-    if (!subTotal || !delivePr || !totalPr) return;
+    if (!subTotal || !delivePr || !totalPrice) return;
 
     subTotal.textContent = `${summary.currency} ${UIHelper.getLocalPrice(summary.subTotal)}`;
     delivePr.textContent = `${summary.delivery > 0 ? `${summary.currency} ${UIHelper.getLocalPrice(summary.delivery)}` : "Free"}`;
-    totalPr.textContent = `${summary.currency} ${UIHelper.getLocalPrice(summary.total - discountAmount)}`;
+    totalPrice.textContent = `${summary.currency} ${UIHelper.getLocalPrice(summary.total - discountAmount)}`;
 
     this.initPromoReadUser(promoContainer, promoInput);
+    this.setupSummaryEvents(formPromo, checkoutBtn);
+  }
 
-    formPromo.onsubmit = this.onApplyPromoCode;
-    checkoutBtn.onclick = this.onCheckout;
+  setupSummaryEvents(formPromo, checkoutBtn) {
+    formPromo.removeEventListener("submit", this.onApplyPromoCode);
+    formPromo.addEventListener("submit", this.onApplyPromoCode, {
+      passive: false,
+    });
+
+    checkoutBtn.removeEventListener("click", this.onCheckout);
+    checkoutBtn.addEventListener("click", this.onCheckout, { passive: true });
   }
 
   initPromoReadUser(container, input) {
@@ -830,7 +838,8 @@ class CartUIEventsHandler {
     this.cart.render(true, "On Apply PromoCode");
   }
 
-  onCheckout() {
+  onCheckout(e) {
+    console.log(e.type);
     this.cart.resetPromoCode();
     const input = document.querySelector(`input[name="promoCode"]`);
     const freshestItems = this.cart.storageCart.load();
@@ -1050,7 +1059,9 @@ export class Cart {
   constructor(myBagInstance) {
     this.myBag = myBagInstance;
     this.boundResetPromoCode = this.resetPromoCode.bind(this);
-    this.run = this.#init;
+    this.run = this.render;
+
+    this.#init();
   }
 
   async #init() {
@@ -1068,15 +1079,9 @@ export class Cart {
     //*=========================
     await this.initComponentsPromo();
 
-    //*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
     this.initEventsCart();
-
-    this.myBag.triggerGlobalCheckout = this.ui.onCheckout; //!
-
     this.initSyncCart();
     this.initSyncWishlist();
-    this.render(false, "Global");
   }
 
   render(syncEnabled = true, msg = "notFound") {
@@ -1096,7 +1101,7 @@ export class Cart {
   initComponentsCart() {
     this.storageCart = new CartStorage(this.CONFIG.STORAGE_KEY, this.myBag); //!
     this.storeCart = new CartStore(); //!
-    this.serviceCart = new CartService(this.storeCart, this.CONFIG, this.myBag); //!
+    this.serviceCart = new CartService(this.storeCart, this.CONFIG); //!
     this.eventsHandler = new CartUIEventsHandler(this, this.myBag); //!
     this.ui = new CartUI(this.eventsHandler.getEvents());
     this.editCartUI = new EditCartUI(this.eventsHandler.getEventsEdit());
@@ -1134,6 +1139,11 @@ export class Cart {
   initEventsCart() {
     window.removeEventListener("clickPromoUser", this.boundResetPromoCode);
     window.addEventListener("clickPromoUser", this.boundResetPromoCode);
+
+    window.removeEventListener("aside-cart-checkout", this.ui.onCheckout);
+    window.addEventListener("aside-cart-checkout", this.ui.onCheckout, {
+      passive: true,
+    });
   }
 
   initSyncWishlist() {
