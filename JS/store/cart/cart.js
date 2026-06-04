@@ -112,15 +112,15 @@ class CartService {
         ...item,
         quantity: qty,
         virtualStock: item.maxStock - qty,
-        total: qty * item.price,
-        totalOld: qty * item.basicPrice,
+        currentItemTotal: qty * item.currentPrice,
+        regularItemTotal: qty * item.regularPrice,
       };
     });
   }
 
   calculateSummary() {
     const items = this.store.items;
-    const total = items.reduce((s, i) => s + i.total, 0);
+    const total = items.reduce((s, i) => s + i.currentItemTotal, 0);
     const currency = items[0]?.currency || "EGP";
     const priceDelivery =
       total < this.config.MIN_DELIVERY_TARGET_PRICE
@@ -140,8 +140,8 @@ class CartService {
     return items.map((item) => {
       return {
         ...item,
-        total: item.quantity * item.price,
-        totalOld: item.quantity * item.basicPrice,
+        currentItemTotal: item.quantity * item.currentPrice,
+        regularItemTotal: item.quantity * item.regularPrice,
       };
     });
   }
@@ -341,11 +341,11 @@ class CartUI {
 
       const salePrice = document.createElement("div");
       salePrice.className = "sale-price";
-      salePrice.textContent = `${ite.currency} ${UIHelper.getLocalPrice(ite.total)}`;
+      salePrice.textContent = `${ite.currency} ${UIHelper.getLocalPrice(ite.regularItemTotal)}`;
 
       const basicPrice = document.createElement("div");
       basicPrice.className = "basic-price";
-      basicPrice.textContent = `${ite.currency} ${UIHelper.getLocalPrice(ite.totalOld)}`;
+      basicPrice.textContent = `${ite.currency} ${UIHelper.getLocalPrice(ite.currentItemTotal)}`;
 
       containerPrices.append(salePrice, basicPrice);
 
@@ -581,10 +581,10 @@ class EditCartUI {
       containerPrice.classList.add(`active`);
       saleNum.style.display = "none";
     } else {
-      salePrice.textContent = `${data.currency} ${UIHelper.getLocalPrice(data.price)}`;
-      saleNum.textContent = `-${UIHelper.getSalePrice(data.price, data.basicPrice).toFixed(0)}%`;
+      salePrice.textContent = `${data.currency} ${UIHelper.getLocalPrice(data.currentPrice)}`;
+      saleNum.textContent = `-${UIHelper.getSalePrice(data.currentPrice, data.regularPrice).toFixed(0)}%`;
     }
-    basicPrice.textContent = `${data.currency} ${UIHelper.getLocalPrice(data.basicPrice)}`;
+    basicPrice.textContent = `${data.currency} ${UIHelper.getLocalPrice(data.currentPrice)}`;
   }
 
   renderTables(data) {
@@ -831,11 +831,16 @@ class CartUIEventsHandler {
   }
 
   onCheckout() {
+    this.cart.resetPromoCode();
     const input = document.querySelector(`input[name="promoCode"]`);
     const freshestItems = this.cart.storageCart.load();
 
     this.cart.storeCart.setItem(this.cart.serviceCart.initItems(freshestItems));
-    if (input) input.value = ""; //! EDIT NOW ):
+
+    if (input) {
+      input.value = "";
+      this.resetPromoState(input);
+    }
 
     const finalSummary = this.cart.storagePromo.loadSummary();
     const isValid = this.cart.servicePromo.checkoutValidate(finalSummary);
@@ -960,8 +965,7 @@ class CartUIEventsHandler {
 
     if (isValid) {
       input.value = ``;
-      input.disabled = true;
-      this.states.submitPromo = false;
+      this.applyValidPromoState(input);
       UIHelper.popupQuickMsg("Correct Promo Code", "rgba(46, 139, 86, 0.69)");
     } else {
       input.focus();
@@ -973,14 +977,17 @@ class CartUIEventsHandler {
     input.disabled = true;
     this.states.submitPromo = false;
   }
+
+  resetPromoState(input) {
     input.disabled = false;
+    this.states.submitPromo = true;
+  }
 
   onclickPromoUser(event, input) {
     const promoUser = event.target.closest(".container-promo-user");
     if (!promoUser) return;
 
-    input.disabled = false;
-    this.states.submitPromo = true;
+    this.resetPromoState(input);
     input.focus();
 
     promoUser.innerHTML = ``;
