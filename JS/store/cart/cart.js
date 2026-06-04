@@ -341,11 +341,11 @@ class CartUI {
 
       const salePrice = document.createElement("div");
       salePrice.className = "sale-price";
-      salePrice.textContent = `${ite.currency} ${UIHelper.getLocalPrice(ite.regularItemTotal)}`;
+      salePrice.textContent = `${ite.currency} ${UIHelper.getLocalPrice(ite.currentItemTotal)}`;
 
       const basicPrice = document.createElement("div");
       basicPrice.className = "basic-price";
-      basicPrice.textContent = `${ite.currency} ${UIHelper.getLocalPrice(ite.currentItemTotal)}`;
+      basicPrice.textContent = `${ite.currency} ${UIHelper.getLocalPrice(ite.regularItemTotal)}`;
 
       containerPrices.append(salePrice, basicPrice);
 
