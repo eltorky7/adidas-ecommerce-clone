@@ -166,8 +166,11 @@ export class MyBag {
         // 1. ثوابت المنتج الأساسي
         productId: this.data.id,
         name: this.data.name,
-        price: this.data.is_sale ? this.data.sale_price : this.data.price,
-        basicPrice: this.data.price,
+        regularPrice: this.data.old_price,
+        salePrice: this.data.is_sale ? this.data.sale_price : null,
+        currentPrice: this.data.is_sale
+          ? this.data.sale_price
+          : this.data.old_price,
         is_sale: this.data.is_sale,
         currency: this.data.currency,
         url: location.href,
@@ -234,18 +237,15 @@ export class MyBag {
     const current = this.cartItemsData[i];
     const selectTag = ite.querySelector(`[name="stock-count"]`);
     const msgLeftOnlyStock = ite.querySelector(".only-stock-msg");
-    const basicPrice = current.is_sale
-      ? ite.querySelector(".sale-price")
-      : ite.querySelector(".basic-price-cart");
-    const oldPrice = current.is_sale
-      ? ite.querySelector(".basic-price-cart")
-      : null;
+    const [salePriceMarkup, regularPriceMarkup] = ite.querySelectorAll(
+      ".sale-price, .basic-price-cart",
+    );
 
     selectTag.value = quantities[current.sku];
-    basicPrice.innerText = `${current.currency} ${this.transformNum(selectTag.value * current.price)}`;
+    salePriceMarkup.innerText = `${current.currency} ${this.transformNum(selectTag.value * current.currentPrice)}`;
 
-    if (oldPrice) {
-      oldPrice.innerText = `${current.currency} ${this.transformNum(selectTag.value * current.price)}`;
+    if (regularPriceMarkup) {
+      regularPriceMarkup.innerText = `${current.currency} ${this.transformNum(selectTag.value * current.regularPrice)}`;
     }
 
     current.quantity = selectTag.value;
@@ -376,7 +376,6 @@ export class MyBag {
     let items = ``;
 
     this.cartItemsData.forEach((ite) => {
-      let saleTag;
       let stockTags = ``;
       let btnIdRandom = "itemCart-" + Math.random() * 100;
 
@@ -390,11 +389,10 @@ export class MyBag {
 
       this.clickDelItemCart.set(btnDel.dataset.sku, this.delItemCart);
 
-      if (ite.is_sale) {
-        saleTag = `<h3 class="sale-price">${ite.currency} ${this.transformNum(ite.price * ite.quantity)}</h3><h3 class="basic-price-cart old">${ite.currency} ${this.transformNum(ite.basicPrice * ite.quantity)}</h3>`;
-      } else {
-        saleTag = `<h3 class="basic-price-cart">${ite.currency} ${this.transformNum(ite.basicPrice * ite.quantity)}</h3>`;
-      }
+      const priceTemplate = ite.is_sale
+        ? `<h3 class="sale-price">${ite.currency} ${this.transformNum(ite.currentPrice * ite.quantity)}</h3>
+           <h3 class="basic-price-cart old">${ite.currency} ${this.transformNum(ite.regularPrice * ite.quantity)}</h3>`
+        : `<h3 class="basic-price-cart">${ite.currency} ${this.transformNum(ite.currentPrice * ite.quantity)}</h3>`;
 
       if (ite.maxStock === 0) stockTags = `<option>0</option>`;
       else {
@@ -409,7 +407,7 @@ export class MyBag {
           <a href="${ite.url}" data-link><img src="${ite.image}" alt="${ite.name}"/></a>
         </div>
         <div class="right-item">${btnDel.outerHTML}<a href="${ite.url}" data-link class="title-product">${ite.name}</a>
-          <div class="price-cart-container">${saleTag}</div>
+          <div class="price-cart-container">${priceTemplate}</div>
           <div class="size-n">size: ${ite.size}</div>
           <select name="stock-count" id="stock-${ite.sku}">${stockTags}</select>
           <div class="only-stock-msg">${ite.virtualStock <= 5 ? `Only ${ite.virtualStock} left in stock` : ""}</div>
@@ -423,10 +421,9 @@ export class MyBag {
 
   renderInitCarts(ite) {
     let items = ``;
-    let totalSubtotal = 0;
-    let saleTag;
     let stockTags = ``;
     let btnIdRandom = "itemCart-" + Math.random() * 100;
+    const subTotal = ite.currentPrice * ite.quantity;
 
     const btnDel = document.createElement("button");
     btnDel.id = `id_${Math.random() * 100}`;
@@ -438,13 +435,10 @@ export class MyBag {
 
     this.clickDelItemCart.set(ite.sku, this.delItemCart);
 
-    if (ite.is_sale) {
-      saleTag = `<h3 class="sale-price">${ite.currency} ${this.transformNum(ite.price * ite.quantity)}</h3><h3 class="basic-price-cart old">${ite.currency} ${this.transformNum(ite.basicPrice * ite.quantity)}</h3>`;
-      totalSubtotal += ite.price * ite.quantity;
-    } else {
-      saleTag = `<h3 class="basic-price-cart">${ite.currency} ${this.transformNum(ite.basicPrice * ite.quantity)}</h3>`;
-      totalSubtotal += ite.basicPrice * ite.quantity;
-    }
+    const priceTemplate = ite.is_sale
+      ? `<h3 class="sale-price">${ite.currency} ${this.transformNum(ite.currentPrice * ite.quantity)}</h3>
+         <h3 class="basic-price-cart old">${ite.currency} ${this.transformNum(ite.regularPrice * ite.quantity)}</h3>`
+      : `<h3 class="basic-price-cart">${ite.currency} ${this.transformNum(ite.currentPrice * ite.quantity)}</h3>`;
 
     if (ite.maxStock === 0) stockTags = `<option>0</option>`;
     else {
@@ -459,7 +453,7 @@ export class MyBag {
           <a href="${ite.url}" data-link><img src="${ite.image}" alt="${ite.name}"/></a>
         </div>
         <div class="right-item">${btnDel.outerHTML}<a href="${ite.url}" data-link class="title-product">${ite.name}</a>
-          <div class="price-cart-container">${saleTag}</div>
+          <div class="price-cart-container">${priceTemplate}</div>
           <div class="size-n">size: ${ite.size}</div>
           <select name="stock-count" id="stock-${ite.sku}">${stockTags}</select>
           <div class="only-stock-msg">${ite.virtualStock <= 5 ? `Only ${ite.virtualStock} left in stock` : ""}</div>
@@ -467,7 +461,7 @@ export class MyBag {
       </div>
       `;
 
-    return [items, totalSubtotal];
+    return [items, subTotal];
   }
 
   initAsideCart() {
@@ -758,19 +752,15 @@ export class MyBag {
   onChangeSelectCartItem(ite, target) {
     const selectTag = ite.querySelector(`[name="stock-count"]`);
     const msgLeftOnlyStock = ite.querySelector(".only-stock-msg");
-    const basicPrice = target.is_sale
-      ? ite.querySelector(".sale-price")
-      : ite.querySelector(".basic-price-cart");
-
-    const oldPrice = target.is_sale
-      ? ite.querySelector(".basic-price-cart")
-      : null;
+    const [salePriceMarkup, regularPriceMarkup] = ite.querySelectorAll(
+      ".sale-price, .basic-price-cart",
+    );
 
     selectTag.onchange = (e) => {
-      basicPrice.innerText = `${target.currency} ${this.transformNum(e.target.value * target.price)}`;
+      salePriceMarkup.innerText = `${target.currency} ${this.transformNum(selectTag.value * target.currentPrice)}`;
 
-      if (oldPrice) {
-        oldPrice.innerText = `${target.currency} ${this.transformNum(e.target.value * target.basicPrice)}`;
+      if (regularPriceMarkup) {
+        regularPriceMarkup.innerText = `${target.currency} ${this.transformNum(e.target.value * target.regularPrice)}`;
       }
 
       target.quantity = e.target.value;
@@ -789,7 +779,7 @@ export class MyBag {
     let result = 0;
     let quantity = {};
     this.cartItemsData.forEach((c) => {
-      result += c.price * c.quantity;
+      result += c.currentPrice * c.quantity;
       quantity[c.sku] = c.quantity;
     });
     return [result, quantity];

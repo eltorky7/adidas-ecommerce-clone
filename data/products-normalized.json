@@ -1686,7 +1686,7 @@
     "is_colours": true,
     "is_sale": false,
     "sale_price": null,
-    "old_price": null,
+    "old_price": 9499,
     "rating": 4.8,
     "default_color_id": "OWHT",
     "details_point": [
@@ -2454,7 +2454,7 @@
     "is_colours": true,
     "is_sale": false,
     "sale_price": null,
-    "old_price": null,
+    "old_price": 6499,
     "rating": 4.9,
     "default_color_id": "GRN",
     "details_point": [
@@ -3207,7 +3207,7 @@
     "is_colours": true,
     "is_sale": false,
     "sale_price": null,
-    "old_price": null,
+    "old_price": 8499,
     "rating": 4.8,
     "default_color_id": "CWT",
     "details_point": [
@@ -3966,7 +3966,7 @@
     "is_colours": false,
     "is_sale": false,
     "sale_price": null,
-    "old_price": null,
+    "old_price": 7599,
     "rating": 4.9,
     "default_color_id": "OWHT",
     "details_point": [
@@ -11529,7 +11529,7 @@
     "is_colours": true,
     "is_sale": false,
     "sale_price": null,
-    "old_price": null,
+    "old_price": 10999,
     "rating": 4.8,
     "default_color_id": "WHT",
     "details_point": [
@@ -12290,7 +12290,7 @@
     "is_colours": true,
     "is_sale": false,
     "sale_price": null,
-    "old_price": null,
+    "old_price": 10999,
     "rating": 4.8,
     "default_color_id": "BLK",
     "details_point": [
@@ -13057,7 +13057,7 @@
     "is_colours": true,
     "is_sale": false,
     "sale_price": null,
-    "old_price": null,
+    "old_price": 10999,
     "rating": 4.8,
     "default_color_id": "WHT",
     "details_point": [

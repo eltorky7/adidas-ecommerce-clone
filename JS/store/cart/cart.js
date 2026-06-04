@@ -973,6 +973,7 @@ class CartUIEventsHandler {
     input.disabled = true;
     this.states.submitPromo = false;
   }
+    input.disabled = false;
 
   onclickPromoUser(event, input) {
     const promoUser = event.target.closest(".container-promo-user");

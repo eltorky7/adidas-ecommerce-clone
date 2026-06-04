@@ -203,16 +203,14 @@ export class WishListUI {
       iconHeart.src = ite.icon;
       productName.textContent = ite.name;
       productBadgesText.textContent = ite.badgesText;
-      basicPrice.textContent = `${ite.currency} ${UIHelper.getLocalPrice(ite.basicPrice)}`;
-      salePrice.textContent = ``;
+      basicPrice.textContent = `${ite.currency} ${UIHelper.getLocalPrice(ite.currentPrice)}`;
+      salePrice.textContent = ite.is_sale
+        ? `${ite.currency} ${UIHelper.getLocalPrice(ite.currentPrice)}`
+        : ``;
       linkOne.href = ite.href;
       linkTwo.href = ite.href;
 
-      if (!ite.is_sale) containerPrice.classList.add("active");
-      else {
-        salePrice.textContent = `${ite.currency} ${UIHelper.getLocalPrice(ite.salePrice)}`;
-        containerPrice.classList.remove("active");
-      }
+      containerPrice.classList.toggle("active", !ite.is_sale);
 
       fragment.appendChild(cloneCart);
     });
@@ -262,25 +260,21 @@ export class WishlistService {
   loadAdded(currItem, sku, isCartItem, indexActive) {
     if (isCartItem) {
       return {
-        id: currItem.productId,
-        sku: sku,
-        name: currItem.name,
-        basicPrice: currItem.basicPrice,
-        salePrice: currItem.price,
-        currency: currItem.currency,
-        is_sale: currItem.is_sale,
-        img: currItem.image,
+        ...currItem,
+        sku,
         icon: "./images/wishlist_full.svg",
         badgesText: "",
-        href: currItem.url || location.href,
       };
     } else {
       return {
         id: currItem.id,
         sku,
         name: currItem.name,
-        basicPrice: currItem.price,
-        salePrice: currItem.sale_price,
+        regularPrice: currItem.old_price,
+        salePrice: currItem.is_sale ? currItem.sale_price : null,
+        currentPrice: currItem.is_sale
+          ? currItem.sale_price
+          : currItem.old_price,
         currency: currItem.currency,
         is_sale: currItem.is_sale,
         img: currItem.variants[indexActive].images.basic,

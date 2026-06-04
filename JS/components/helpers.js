@@ -130,8 +130,8 @@ export class UIHelper {
     anim.onfinish = () => popup.remove();
   }
 
-  static getSalePrice(salePrice, basicPrice) {
-    return 100 - (salePrice / basicPrice) * 100;
+  static getSalePrice(salePrice, regularPrice) {
+    return 100 - (salePrice / regularPrice) * 100;
   }
 
   static random(min, max) {
