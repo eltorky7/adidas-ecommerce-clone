@@ -837,8 +837,7 @@ class CartUIEventsHandler {
     this.cart.render(true, "On Apply PromoCode");
   }
 
-  onCheckout(e) {
-    console.log(e.type);
+  onCheckout() {
     this.cart.resetPromoCode();
     const input = document.querySelector(`input[name="promoCode"]`);
     const freshestItems = this.cart.storageCart.load();
@@ -1060,6 +1059,8 @@ export class Cart {
     this.myBag = myBagInstance;
     this.boundResetPromoCode = this.resetPromoCode.bind(this);
     this.run = this.#init;
+
+    this.#init();
   }
 
   async #init() {
@@ -1140,10 +1141,7 @@ export class Cart {
     window.removeEventListener("clickPromoUser", this.boundResetPromoCode);
     window.addEventListener("clickPromoUser", this.boundResetPromoCode);
 
-    window.removeEventListener("aside-cart-checkout", this.ui.onCheckout);
-    window.addEventListener("aside-cart-checkout", this.ui.onCheckout, {
-      passive: true,
-    });
+    this.eventBus.on("aside-cart-checkout", this.ui.onCheckout);
   }
 
   initSyncWishlist() {

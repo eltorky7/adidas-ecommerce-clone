@@ -740,8 +740,7 @@ export class MyBag {
   }
 
   handleAsideCheckoutClick() {
-    const asideCheckoutEvent = new Event("aside-cart-checkout");
-    window.dispatchEvent(asideCheckoutEvent);
+    this.eventBus.emit("aside-cart-checkout", { source: "aside-menu" });
 
     this.updateAsideCartUi();
   }
