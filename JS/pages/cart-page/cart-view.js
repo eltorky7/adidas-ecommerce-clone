@@ -1,5 +1,5 @@
 import { AbstractView } from "/JS/pages/abstract-view.js";
-import { cartInstance } from "/JS/store/cart/cart.js";
+import { cartInstance } from "/JS/components/dependencies.js";
 
 class Config {
   static get load() {

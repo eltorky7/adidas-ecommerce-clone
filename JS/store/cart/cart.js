@@ -1,7 +1,6 @@
 import { MobileGallery } from "/JS/pages/product-page/product-components.js";
 import { UIHelper, Products } from "/JS/components/helpers.js";
 import { wishlistInstance } from "/JS/store/wishlist/wishlist.js";
-import { myBagInstance } from "/JS/store/cart/my-bag.js";
 import {
   PromoStorage,
   PromoStore,
@@ -1056,7 +1055,8 @@ class CartUIEventsHandler {
 }
 
 export class Cart {
-  constructor(myBagInstance) {
+  constructor(myBagInstance, eventBus) {
+    this.eventBus = eventBus;
     this.myBag = myBagInstance;
     this.boundResetPromoCode = this.resetPromoCode.bind(this);
     this.run = this.render;
@@ -1216,5 +1216,3 @@ export class Cart {
     }
   }
 }
-
-export const cartInstance = new Cart(myBagInstance);

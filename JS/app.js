@@ -1,10 +1,7 @@
 //* 1. استدعاء مكونات الواجهة
 import { Navigation, Footer } from "/JS/components/nav-and-foot.js";
 
-//* 2. استدعاء الحالة العامة (Global States)
-// import { myBagInstance } from "/JS/store/my-bag.js";
-
-//* 3. استدعاء الصفحات والراوتر
+//* 2. استدعاء الصفحات والراوتر
 import { NotFoundView } from "/JS/pages/not-found-view.js";
 import { HomeView } from "/JS/pages/home-page/home-view.js";
 import { ProductView } from "/JS/pages/product-page/product-view.js";

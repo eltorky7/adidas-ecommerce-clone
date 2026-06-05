@@ -1,5 +1,5 @@
 import { Footer } from "/JS/components/nav-and-foot.js";
-import { myBagInstance } from "/JS/store/cart/my-bag.js";
+import { myBagInstance } from "/JS/components/dependencies.js";
 
 /* { تعليمات }
  * routes = [{ path: "/", view: "CLASS" }]; Path => الرابط, view => (Root) كل صفحة ليها كلاس

@@ -1,7 +1,8 @@
 import { UIHelper } from "/JS/components/helpers.js";
 
 export class MyBag {
-  constructor() {
+  constructor(eventBus) {
+    this.eventBus = eventBus;
     this.clickAdd = this.addProduct; //* في حالة الضغط على شراء منتج
     this.time = null;
     this.init();
@@ -844,5 +845,3 @@ export class MyBag {
     }
   }
 }
-
-export const myBagInstance = new MyBag();

@@ -7,7 +7,7 @@ import {
 
 import { UIHelper } from "/JS/components/helpers.js";
 import { Carousel } from "/JS/pages/home-page/home-components.js";
-import { myBagInstance } from "/JS/store/cart/my-bag.js";
+import { myBagInstance } from "/JS/components/dependencies.js";
 import { wishlistInstance } from "/JS/store/wishlist/wishlist.js";
 import { navigateTo } from "/JS/router.js";
 
