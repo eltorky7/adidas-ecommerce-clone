@@ -125,7 +125,7 @@ export class CartView extends AbstractView {
   }
 
   mount() {
-    cartInstance.run();
+    cartInstance.run(true);
   }
 
   unmount() {

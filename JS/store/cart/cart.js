@@ -1063,7 +1063,7 @@ export class Cart {
     this.#init();
   }
 
-  async #init() {
+  async #init(hasRun) {
     //*=========================
     //*==== Init Cart
     //*=========================
@@ -1082,7 +1082,7 @@ export class Cart {
     this.initSyncCart();
     this.initSyncWishlist();
 
-    this.render();
+    if (hasRun) this.render();
   }
 
   render(syncEnabled = true, msg = "notFound") {
