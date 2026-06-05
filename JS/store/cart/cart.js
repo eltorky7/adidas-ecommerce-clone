@@ -268,6 +268,8 @@ class CartUI {
   }
 
   initPromoReadUser(container, input) {
+    if (!container) return;
+
     container.innerHTML = ``;
 
     const code = this.getActivePromoCode();
@@ -488,9 +490,9 @@ class CartUI {
 }
 
 class CartStorage {
-  constructor(key, myBag) {
+  constructor(key, eventBus) {
     this.key = key;
-    this.myBag = myBag;
+    this.eventBus = eventBus;
   }
 
   load() {
@@ -503,7 +505,7 @@ class CartStorage {
 
   save(items) {
     localStorage.setItem(this.key, JSON.stringify(items));
-    this.myBag.updateCartItemsReadOnly();
+    this.eventBus.emit("cart-items-changed");
   }
 
   loadProductByMemory(id) {
@@ -1100,8 +1102,8 @@ export class Cart {
   }
 
   initComponentsCart() {
-    this.storageCart = new CartStorage(this.CONFIG.STORAGE_KEY, this.myBag); //!
-    this.storeCart = new CartStore(); //!
+    this.storageCart = new CartStorage(this.CONFIG.STORAGE_KEY, this.eventBus);
+    this.storeCart = new CartStore();
     this.serviceCart = new CartService(this.storeCart, this.CONFIG); //!
     this.eventsHandler = new CartUIEventsHandler(this, this.myBag); //!
     this.ui = new CartUI(this.eventsHandler.getEvents());

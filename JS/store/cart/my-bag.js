@@ -28,6 +28,11 @@ export class MyBag {
 
     this.updateCartItemsReadOnly();
 
+    this.eventBus.on(
+      "cart-items-changed",
+      this.updateCartItemsReadOnly.bind(this),
+    );
+
     this.onStorageChange();
 
     const onPopstate = () => {
@@ -269,13 +274,11 @@ export class MyBag {
   }
 
   updateCartItemsReadOnly(data) {
-    if (!data) {
-      this.cartItemsData = this.getCartItems();
-    }
+    if (!data) this.cartItemsData = this.getCartItems();
+
     const qty = this.getQty(this.cartItemsData);
 
     this.bagResultNum.textContent = qty;
-
     this.iconBag.src =
       qty > 0 ? "/images/bagfull.svg" : "../../images/bag empty.svg";
 
