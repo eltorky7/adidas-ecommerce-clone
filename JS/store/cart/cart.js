@@ -1059,9 +1059,7 @@ export class Cart {
     this.eventBus = eventBus;
     this.myBag = myBagInstance;
     this.boundResetPromoCode = this.resetPromoCode.bind(this);
-    this.run = this.render;
-
-    this.#init();
+    this.run = this.#init;
   }
 
   async #init() {
@@ -1082,6 +1080,8 @@ export class Cart {
     this.initEventsCart();
     this.initSyncCart();
     this.initSyncWishlist();
+
+    this.render();
   }
 
   render(syncEnabled = true, msg = "notFound") {
@@ -1168,6 +1168,9 @@ export class Cart {
 
   postSyncCart() {
     this.storageCart.save(this.storeCart.items);
+
+    if (!this.sync) return;
+
     this.sync.broadcast({
       type: "CHANGE_CURRENT_ITEM",
       data: {
