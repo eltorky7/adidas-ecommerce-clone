@@ -176,16 +176,17 @@ class CartService {
 }
 
 class CartUI {
-  constructor({
-    onQtyChange,
-    onRemove,
-    onToggleWishList,
-    onApplyPromoCode,
-    onCheckout,
-    onClickBtnEdit,
-    onclickPromoUser,
-    getActivePromoCode,
-    applyValidPromoState,
+  constructor(
+    {
+      onQtyChange,
+      onRemove,
+      onToggleWishList,
+      onApplyPromoCode,
+      onCheckout,
+      onClickBtnEdit,
+      onclickPromoUser,
+      getActivePromoCode,
+      applyValidPromoState,
     },
     config,
   ) {
@@ -775,7 +776,6 @@ class EditCartUI {
 class CartUIEventsHandler {
   constructor(cart) {
     this.cart = cart;
-    this.myBag = myBag;
 
     this.states = {
       submitPromo: true,
@@ -844,7 +844,6 @@ class CartUIEventsHandler {
   }
 
   onCheckout() {
-    this.cart.resetPromoCode();
     const input = document.querySelector(`input[name="promoCode"]`);
     const freshestItems = this.cart.storageCart.load();
 
@@ -856,7 +855,7 @@ class CartUIEventsHandler {
     }
 
     const finalSummary = this.cart.storagePromo.loadSummary();
-    const isValid = this.cart.servicePromo.checkoutValidate(finalSummary);
+    this.cart.servicePromo.checkoutValidate(finalSummary);
 
     this.cart.storagePromo.save(this.cart.storePromo.promos);
 
@@ -956,7 +955,14 @@ class CartUIEventsHandler {
   }
 
   //*-=-=-=-=-=-- { Helpers } -=-=-=-=-=--
+  /**
+   * @param {object} input
+   * @param {object} value
+   * @returns {void}
+   */
   checkValidValue(input, value) {
+    if (!value) return;
+
     const { valid: isValid, message } = value;
 
     input.classList.toggle("warning", !isValid);
@@ -1029,6 +1035,8 @@ class CartUIEventsHandler {
       value,
       totalPrice,
     ); //* Discount Price
+
+    if (!value) return;
 
     if (value.valid) {
       this.cart.storagePromo.saveSummary({
@@ -1104,10 +1112,10 @@ export class Cart {
       "promos",
       "cartSummary",
       "user",
-      "data/promo-codes.json",
+      "/data/promo-codes.json",
     );
     this.storePromo = new PromoStore();
-    this.servicePromo = new PromoService(this.storePromo);
+    this.servicePromo = new PromoService(this.storePromo, this.storagePromo);
     this.promos = await this.storagePromo.load();
 
     //* (Save & Set) Promo Codes

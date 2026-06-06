@@ -11,7 +11,8 @@ export class PromoStorage {
     try {
       return JSON.parse(localStorage.getItem(this.key)) || [];
     } catch (err) {
-      return err;
+      console.error(err);
+      return [];
     }
   }
 
@@ -23,9 +24,10 @@ export class PromoStorage {
       const res = await fetch(this.jsonPath);
       const data = await res.json();
 
-      return [...(JSON.parse(localStorage.getItem(this.key)) || []), ...data];
+      return data;
     } catch (err) {
-      return err;
+      console.error(err);
+      return [];
     }
   }
 
@@ -93,11 +95,14 @@ export class PromoStore {
 }
 
 export class PromoService {
-  constructor(store) {
+  constructor(store, storage) {
     this.store = store;
+    this.storage = storage;
   }
 
   validateCode(inputCode, cartTotal, user) {
+    if (!Object.keys(this.store.promos).length) return;
+
     const promo = this.store.promos.find((pr) => pr.code === inputCode);
     if (!promo) return { valid: false, message: "Invalid promo code." };
 
@@ -130,11 +135,14 @@ export class PromoService {
 
     return {
       valid: true,
-      promo: promo,
+      promo,
     };
   }
 
-  calculateDiscount({ promo }, cartTotal) {
+  calculateDiscount(valuePromo, cartTotal) {
+    if (!valuePromo) return;
+
+    const { promo } = valuePromo;
     if (!promo) return;
 
     let discountAmount = 0;
@@ -149,22 +157,25 @@ export class PromoService {
   }
 
   checkoutValidate(summary) {
-    if (!summary) return;
+    if (!summary) {
+      this.store.setPromos(this.storage.load());
+      return;
+    }
 
     const { code, cartTotal, user } = summary;
     const isValid = this.validateCode(code, cartTotal, user).valid;
 
     if (isValid) {
-      this.store.setPromos(
-        this.store.promos.map((pr) => {
-          if (pr.code === code) {
-            pr.usage_count++;
-            pr.used_by.push(user);
-          }
+      const updatePromos = this.store.promos.map((pr) => {
+        if (pr.code === code) {
+          pr.usage_count++;
+          pr.used_by.push(user);
+        }
 
-          return pr;
-        }),
-      );
+        return pr;
+      });
+
+      this.store.setPromos(updatePromos);
     }
     return isValid;
   }
