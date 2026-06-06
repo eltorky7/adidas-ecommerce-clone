@@ -186,7 +186,9 @@ class CartUI {
     onclickPromoUser,
     getActivePromoCode,
     applyValidPromoState,
-  }) {
+    },
+    config,
+  ) {
     this.onQtyChange = onQtyChange;
     this.onRemove = onRemove;
     this.onToggleWishList = onToggleWishList;
@@ -200,6 +202,8 @@ class CartUI {
     this.containerCart = document.getElementById("containerCart");
     this.containerItems = document.getElementById("viewCarts");
     this.containerSummary = document.getElementById("containerSummary");
+
+    this.config = config;
 
     this.isAllFoundContainers = true;
 
@@ -380,7 +384,7 @@ class CartUI {
       const stockDiv = document.createElement("div");
       stockDiv.className = "available-stock-msg";
       stockDiv.innerHTML =
-        ite.virtualStock <= Config.load().MIN_STOCK_WARNING
+        ite.virtualStock <= this.config.MIN_STOCK_WARNING
           ? `Only ${ite.virtualStock} left in stock`
           : ``;
 
@@ -856,8 +860,7 @@ class CartUIEventsHandler {
 
     this.cart.storagePromo.save(this.cart.storePromo.promos);
 
-    this.cart.storagePromo.saveSummary(isValid ? finalSummary : null);
-    this.cart.storePromo.setSummary(this.cart.storagePromo.loadSummary());
+    this.cart.resetSummary();
 
     this.cart.serviceCart.updateQtyProducts();
 
@@ -1000,7 +1003,7 @@ class CartUIEventsHandler {
     const value = this.cart.servicePromo.validateCode(code, totalPrice, user); //* Result Promo Value
 
     if (!value.valid) {
-      this.cart.resetPromoCode();
+      this.cart.resetSummary();
       return;
     }
 
@@ -1044,8 +1047,7 @@ class CartUIEventsHandler {
 export class Cart {
   constructor(eventBus) {
     this.eventBus = eventBus;
-    this.myBag = myBagInstance;
-    this.boundResetPromoCode = this.resetPromoCode.bind(this);
+    this.boundResetPromoCode = this.resetSummary.bind(this);
     this.run = this.#init;
 
     this.#init();
@@ -1055,7 +1057,7 @@ export class Cart {
     //*=========================
     //*==== Init Cart
     //*=========================
-    this.CONFIG = Config.load();
+    this.config = Config.load();
     this.initComponentsCart();
 
     //* Init & Save Cart Items
@@ -1090,9 +1092,9 @@ export class Cart {
   initComponentsCart() {
     this.storageCart = new CartStorage(this.config.STORAGE_KEY, this.eventBus);
     this.storeCart = new CartStore();
-    this.serviceCart = new CartService(this.storeCart, this.CONFIG); //!
+    this.serviceCart = new CartService(this.storeCart, this.config);
     this.eventsHandler = new CartUIEventsHandler(this);
-    this.ui = new CartUI(this.eventsHandler.getEvents());
+    this.ui = new CartUI(this.eventsHandler.getEvents(), this.config);
     this.editCartUI = new EditCartUI(this.eventsHandler.getEventsEdit());
   }
 
@@ -1143,7 +1145,7 @@ export class Cart {
   }
 
   initSyncCart() {
-    this.sync = new CartSync(this.CONFIG.CHANNEL_NAME, ({ data }) => {
+    this.sync = new CartSync(this.config.CHANNEL_NAME, ({ data }) => {
       if (!data.length) return;
 
       this.storeCart.setItem(this.serviceCart.initItems(data.cart));
@@ -1168,7 +1170,7 @@ export class Cart {
     });
   }
 
-  resetPromoCode(isInit = {}) {
+  resetSummary(isInit = {}) {
     this.storagePromo.saveSummary(null);
     this.storePromo.setSummary(null);
     if (isInit.type === "clickPromoUser") this.render();
@@ -1178,7 +1180,7 @@ export class Cart {
     const user = this.storagePromo.loadUser();
 
     if (!summary || !user) {
-      this.resetPromoCode();
+      this.resetSummary();
       return;
     }
 
