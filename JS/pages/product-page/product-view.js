@@ -1,5 +1,6 @@
 import { AbstractView } from "/JS/pages/abstract-view.js";
 import { Details } from "/JS/pages/product-page/product-details.js";
+import { appEventBus } from "/JS/components/dependencies.js";
 
 class Config {
   static get load() {
@@ -33,8 +34,13 @@ export class ProductView extends AbstractView {
       pathesData: { DATA_PRODUCTS_PATH },
     } = this.config;
 
-    this.details = new Details(VIEW_ID, LEFT_ID, RIGHT_ID);
+    this.details = new Details(VIEW_ID, LEFT_ID, RIGHT_ID, appEventBus);
     await this.details.run(DATA_PRODUCTS_PATH, this.params.id);
+  }
+
+  unmount() {
+    if (this.details.channel) this.details.channel.close();
+    if (this.details.updateTimer) clearTimeout(this.details.updateTimer);
   }
 
   getHtml() {

@@ -27,11 +27,13 @@ export class MyBag {
     this.handleExitClick = this.updateAsideCartUi.bind(this);
 
     this.updateCartItemsReadOnly();
-
     this.eventBus.on(
       "cart-items-changed",
       this.updateCartItemsReadOnly.bind(this),
     );
+
+    this.eventBus.removeEvent("update-product", this.clearMyBagData.bind(this));
+    this.eventBus.on("update-product", this.clearMyBagData.bind(this));
 
     this.onStorageChange();
 
@@ -212,7 +214,8 @@ export class MyBag {
     this.updateCartItems(newDataCartItems);
     this.updateCartItemsReadOnly();
     this.updateDataCheckout();
-    window.dispatchEvent(new CustomEvent("myBagUpdated"));
+
+    this.eventBus.emit("myBagUpdated");
   }
 
   updateDataCheckout() {

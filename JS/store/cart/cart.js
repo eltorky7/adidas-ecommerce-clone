@@ -769,7 +769,7 @@ class EditCartUI {
 }
 
 class CartUIEventsHandler {
-  constructor(cart, myBag) {
+  constructor(cart) {
     this.cart = cart;
     this.myBag = myBag;
 
@@ -866,21 +866,7 @@ class CartUIEventsHandler {
 
     this.cart.render(true, "On Checkout");
 
-    //!================== EDIT NOW! =================== ):
-    if (!this.myBag) return;
-    if (typeof this.myBag.clearMyBagData === "function") {
-      this.myBag.clearMyBagData();
-    }
-
-    if (!this.myBag.detailsThis) return;
-
-    const freshProducts = JSON.parse(localStorage.getItem("products"));
-    this.myBag.detailsThis.data = freshProducts.find(
-      (pr) => pr.id === localStorage.getItem("activeNowProduct"),
-    );
-
-    this.myBag.detailsThis.selectProduct = null;
-    this.myBag.detailsThis.updatePageData();
+    this.cart.eventBus.emit("update-product");
   }
 
   onClickBtnEdit(e, sku) {
@@ -1056,7 +1042,7 @@ class CartUIEventsHandler {
 }
 
 export class Cart {
-  constructor(myBagInstance, eventBus) {
+  constructor(eventBus) {
     this.eventBus = eventBus;
     this.myBag = myBagInstance;
     this.boundResetPromoCode = this.resetPromoCode.bind(this);
@@ -1102,10 +1088,10 @@ export class Cart {
   }
 
   initComponentsCart() {
-    this.storageCart = new CartStorage(this.CONFIG.STORAGE_KEY, this.eventBus);
+    this.storageCart = new CartStorage(this.config.STORAGE_KEY, this.eventBus);
     this.storeCart = new CartStore();
     this.serviceCart = new CartService(this.storeCart, this.CONFIG); //!
-    this.eventsHandler = new CartUIEventsHandler(this, this.myBag); //!
+    this.eventsHandler = new CartUIEventsHandler(this);
     this.ui = new CartUI(this.eventsHandler.getEvents());
     this.editCartUI = new EditCartUI(this.eventsHandler.getEventsEdit());
   }
@@ -1143,6 +1129,7 @@ export class Cart {
     window.removeEventListener("clickPromoUser", this.boundResetPromoCode);
     window.addEventListener("clickPromoUser", this.boundResetPromoCode);
 
+    this.eventBus.removeEvent("aside-cart-checkout", this.ui.onCheckout);
     this.eventBus.on("aside-cart-checkout", this.ui.onCheckout);
   }
 

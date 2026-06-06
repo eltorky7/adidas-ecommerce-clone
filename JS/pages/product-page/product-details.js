@@ -12,7 +12,7 @@ import { wishlistInstance } from "/JS/store/wishlist/wishlist.js";
 import { navigateTo } from "/JS/router.js";
 
 export class Details {
-  constructor(viewId, leftSecId, rightSecId) {
+  constructor(viewId, leftSecId, rightSecId, eventsBus) {
     this.viewId = document.getElementById(viewId);
     this.leftSection = document.getElementById(leftSecId);
     this.rightSection = document.getElementById(rightSecId);
@@ -28,9 +28,12 @@ export class Details {
     this.accordion = new Accordion("accordion");
     this.mobileGallery = new MobileGallery("mobileGallery");
 
+    this.eventsBus = eventsBus;
     this.myBag = myBagInstance;
 
     this.wishlist = wishlistInstance;
+
+    this.handleUpdatePageData = this.updatePageData.bind(this);
 
     if (this.wishlist) {
       this.wishlist.detailsThis = this;
@@ -118,11 +121,10 @@ export class Details {
     this.updateRecentProducts();
 
     this.channel = new BroadcastChannel("cart_channel");
-    this.channel.onmessage = this.updatePageData.bind(this);
+    this.channel.onmessage = this.handleUpdatePageData;
 
-    window.addEventListener("myBagUpdated", () => {
-      this.updatePageData();
-    });
+    this.eventsBus.removeEvent("update-product", this.handleUpdatePageData);
+    this.eventsBus.on("update-product", this.handleUpdatePageData);
   }
 
   updateRecentProducts() {
@@ -723,7 +725,6 @@ export class Details {
 
     let sizes = ``;
     let target = null;
-
     this.selectProduct = null;
 
     this.cartItems = this.getDataItems("cartItems") || null;
@@ -791,7 +792,6 @@ export class Details {
       if (!checkSize) return;
 
       this.onAndOffPurchasing(false, sizeText, tableSize);
-
       this.selectProduct = selectSize;
 
       // 3. اللوجيك الطبيعي: هل هو أصلاً مختاره قبل كده (on)؟
@@ -967,6 +967,7 @@ export class Details {
       text.style.color = "";
     }
   }
+
   onMoveSummary() {
     clearTimeout(this.t);
     this.t = setTimeout(() => {
