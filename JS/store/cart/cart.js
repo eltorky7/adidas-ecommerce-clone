@@ -808,14 +808,14 @@ class CartUIEventsHandler {
     this.cart.serviceCart.updateQuantity(id, qty);
     this.syncPromoCode();
 
-    this.cart.render(true, "Change-Qty");
+    this.cart.render();
   }
 
   onRemove(id) {
     this.cart.serviceCart.updateQuantity(id, 0);
     this.syncPromoCode();
 
-    this.cart.render(true, "on-remove");
+    this.cart.render();
   }
 
   onApplyPromoCode(event) {
@@ -840,7 +840,7 @@ class CartUIEventsHandler {
     };
 
     this.cart.storePromo.setSummary(this.cart.storagePromo.loadSummary());
-    this.cart.render(true, "On Apply PromoCode");
+    this.cart.render();
   }
 
   onCheckout() {
@@ -866,7 +866,7 @@ class CartUIEventsHandler {
     this.cart.storeCart.clearItems();
     this.cart.storageCart.save(this.cart.storeCart.items);
 
-    this.cart.render(true, "On Checkout");
+    this.cart.render();
 
     this.cart.eventBus.emit("update-product");
   }
@@ -888,7 +888,7 @@ class CartUIEventsHandler {
     const currItem = this.cart.serviceCart.getItem(sku);
     this.cart.wishlistInstance.toggleFromCart(currItem, isActive);
 
-    this.cart.render(false, "on-Add-Wishlist");
+    this.cart.render(false);
   }
 
   getActivePromoCode() {
@@ -944,7 +944,7 @@ class CartUIEventsHandler {
     });
 
     this.cart.storageCart.save(this.cart.storeCart.items);
-    this.cart.render(true, "On Click Edit");
+    this.cart.render();
     exitBtn.click();
   }
 
@@ -1083,8 +1083,7 @@ export class Cart {
     if (hasRun) this.render();
   }
 
-  render(syncEnabled = true, msg = "notFound") {
-    //* console.log(msg);
+  render(syncEnabled = true) {
     if (!UIHelper.getPageURL(["cart"])) return;
 
     const discAmount = this.storePromo.summary?.discountAmount || 0;
@@ -1147,7 +1146,7 @@ export class Cart {
     this.wishlistChannelListener = new BroadcastChannel("wishlist_channel");
     this.wishlistChannelListener.onmessage = ({ data }) => {
       if (data.type === "CHANGE_CURRENT_ITEM") {
-        this.render(false, "BroadCast-wishlist");
+        this.render(false);
       }
     };
   }
@@ -1159,7 +1158,7 @@ export class Cart {
       this.storeCart.setItem(this.serviceCart.initItems(data.cart));
       this.storePromo.setPromos(data.promos);
       this.storePromo.setSummary(data.summary || null);
-      this.render(false, "BroadCast-Cart");
+      this.render(false);
     });
   }
 
