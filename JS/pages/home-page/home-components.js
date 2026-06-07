@@ -610,32 +610,41 @@ export class Carousel {
       if (isSpecial) {
         step = singleSlideFullWidth * n_slides;
       } else {
-        const visibleItems = Math.ceil(
+        const visibleItems = Math.round(
           viewport.clientWidth / singleSlideFullWidth,
         );
         step = singleSlideFullWidth * Math.max(1, visibleItems);
       }
 
       maxTranslate = Math.max(0, track.scrollWidth - viewport.clientWidth);
-      maxIndex = step > 0 ? Math.ceil(maxTranslate / step) : 0;
+      maxIndex =
+        step > 0
+          ? n_slides === 1
+            ? Math.ceil(maxTranslate / step)
+            : Math.round(maxTranslate / step)
+          : 0;
       index = Math.max(0, Math.min(index, maxIndex));
 
-      if (carouselDots) carouselDots.innerHTML = "";
-      if (maxIndex >= 1 && carouselDots) {
-        for (let i = 0; i <= maxIndex; i++) {
-          const dot = document.createElement("div");
-          dot.classList.add("dot2");
-          dot.onclick = () => {
-            index = i;
-            apply();
-          };
-          carouselDots.append(dot);
-        }
-        dots = carouselDots.querySelectorAll(".dot2");
-        checkDots();
-      } else {
+      if (!carouselDots) return;
+
+      carouselDots.innerHTML = "";
+
+      if (maxIndex < 1) {
         dots = null;
+        return;
       }
+
+      for (let i = 0; i <= maxIndex; i++) {
+        const dot = document.createElement("div");
+        dot.classList.add("dot2");
+        dot.onclick = () => {
+          index = i;
+          apply();
+        };
+        carouselDots.append(dot);
+      }
+      dots = carouselDots.querySelectorAll(".dot2");
+      checkDots();
     };
 
     const checkDots = () => {
