@@ -125,7 +125,10 @@ export class PromoService {
 
     const userUsageTimes = promo.used_by.filter((email) => email === user);
 
-    if (userUsageTimes.length >= promo.max_uses_per_user) {
+    if (
+      promo.max_uses_per_user !== null &&
+      userUsageTimes.length >= promo.max_uses_per_user
+    ) {
       return {
         valid: false,
         message:
