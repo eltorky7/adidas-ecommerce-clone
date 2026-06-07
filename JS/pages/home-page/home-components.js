@@ -316,7 +316,7 @@ export class Carousel {
       if (title) title.textContent = titleText;
       if (desc) desc.textContent = descText;
       this.createCardsCustomStyle(dataArray, carousel);
-      this.setupCarouselPhysics(carousel, 1, false);
+      this.setupCarouselPhysics(carousel, null, false);
     }
   }
 
@@ -422,7 +422,7 @@ export class Carousel {
 
   createCards(cloneDataProd, carousel) {
     this.createCardsCustomStyle(cloneDataProd, carousel);
-    this.setupCarouselPhysics(carousel, 1, false); // تشغيل الحركة
+    this.setupCarouselPhysics(carousel, null, false); // تشغيل الحركة
   }
 
   createSlides(slides, carousel) {
@@ -572,7 +572,24 @@ export class Carousel {
     }
   }
 
-  setupCarouselPhysics(carousel, n_slides, isSpecial) {
+  /**
+   * @param {number} step
+   * @param {boolean} isSpecial
+   * @param {number} slidesCount
+   * @param {number} maxTranslate
+   * @returns {number}
+   */
+  getMaxIndex(step, isSpecial, slidesCount, maxTranslate) {
+    if (step < 1) return 0;
+
+    if (isSpecial && slidesCount && slidesCount === 1) {
+      return Math.ceil(maxTranslate / step);
+    }
+
+    return Math.round(maxTranslate / step);
+  }
+
+  setupCarouselPhysics(carousel, slidesCount, isSpecial) {
     let index = 0;
     let maxIndex = 0;
     let startTranslate = 0;
@@ -608,7 +625,7 @@ export class Carousel {
       const singleSlideFullWidth = slideWidth;
 
       if (isSpecial) {
-        step = singleSlideFullWidth * n_slides;
+        step = singleSlideFullWidth * slidesCount;
       } else {
         const visibleItems = Math.round(
           viewport.clientWidth / singleSlideFullWidth,
@@ -617,12 +634,8 @@ export class Carousel {
       }
 
       maxTranslate = Math.max(0, track.scrollWidth - viewport.clientWidth);
-      maxIndex =
-        step > 0
-          ? n_slides === 1
-            ? Math.ceil(maxTranslate / step)
-            : Math.round(maxTranslate / step)
-          : 0;
+
+      maxIndex = this.getMaxIndex(step, isSpecial, slidesCount, maxTranslate);
       index = Math.max(0, Math.min(index, maxIndex));
 
       if (!carouselDots) return;
