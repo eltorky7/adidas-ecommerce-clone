@@ -140,8 +140,8 @@ export class UIHelper {
   }
 
   static getPageURL(arr) {
-    const pathArray = window.location.pathname.split("/")[1];
-    if (arr) return arr.some((page) => pathArray.includes(page));
+    const pathArray = window.location.pathname.split("/");
+    if (arr) return arr.some((page) => pathArray[1].includes(page));
 
     const currentPage = pathArray[1];
     const currentId = pathArray[2];
