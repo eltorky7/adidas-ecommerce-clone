@@ -129,6 +129,8 @@ export class CartView extends AbstractView {
   }
 
   unmount() {
+    if (!cartInstance) return;
+
     window.removeEventListener(
       "clickPromoUser",
       cartInstance.boundResetPromoCode,
@@ -142,6 +144,11 @@ export class CartView extends AbstractView {
     if (cartInstance.sync) {
       cartInstance.sync.close();
       cartInstance.sync = null;
+    }
+
+    if (cartInstance.channelProduct) {
+      cartInstance.channelProduct.close();
+      cartInstance.channelProduct = null;
     }
 
     if (cartInstance.ui && typeof cartInstance.ui.destroy === "function") {

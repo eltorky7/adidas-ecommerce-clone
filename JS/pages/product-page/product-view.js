@@ -39,8 +39,15 @@ export class ProductView extends AbstractView {
   }
 
   unmount() {
-    if (this.details.channel) this.details.channel.close();
-    if (this.details.updateTimer) clearTimeout(this.details.updateTimer);
+    if (this.details.channel) {
+      this.details.channel.close();
+      this.details.channel = null;
+    }
+
+    if (this.details.updateTimer) {
+      clearTimeout(this.details.updateTimer);
+      this.details.updateTimer = null;
+    }
   }
 
   getHtml() {
