@@ -1,6 +1,5 @@
 import { MobileGallery } from "/JS/pages/product-page/product-components.js";
 import { UIHelper, Products } from "/JS/components/helpers.js";
-import { wishlistInstance } from "/JS/store/wishlist/wishlist.js";
 import {
   PromoStorage,
   PromoStore,
@@ -190,6 +189,7 @@ class CartUI {
       applyValidPromoState,
     },
     config,
+    wishlist,
   ) {
     this.onQtyChange = onQtyChange;
     this.onRemove = onRemove;
@@ -206,6 +206,7 @@ class CartUI {
     this.containerSummary = document.getElementById("containerSummary");
 
     this.config = config;
+    this.wishlist = wishlist;
 
     this.isAllFoundContainers = true;
 
@@ -417,8 +418,8 @@ class CartUI {
       wishlistBtn.className = "add-product-to-wishlist-btn center";
       const wishlistImg = document.createElement("img");
 
-      wishlistImg.src = wishlistInstance.store.has(
-        wishlistInstance.service.skuFormate(ite.sku),
+      wishlistImg.src = this.wishlist.store.has(
+        this.wishlist.service.skuFormate(ite.sku),
       )
         ? "images/wishlist_full.svg"
         : "images/download1.svg";
@@ -471,8 +472,8 @@ class CartUI {
   }
 
   handleToggleWishlist(sku, imgElement) {
-    const isActive = wishlistInstance.store.has(
-      wishlistInstance.skuFormate(sku),
+    const isActive = this.wishlist.store.has(
+      this.wishlist.service.skuFormate(sku),
     );
     imgElement.classList.toggle("active", isActive);
 
@@ -887,7 +888,7 @@ class CartUIEventsHandler {
 
   onToggleWishList(isActive, sku) {
     const currItem = this.cart.serviceCart.getItem(sku);
-    this.cart.wishlistInstance.toggleFromCart(currItem, isActive);
+    this.cart.wishlist.toggleFromCart(currItem, isActive);
 
     this.cart.render(false);
   }
@@ -1054,11 +1055,13 @@ class CartUIEventsHandler {
 }
 
 export class Cart {
-  constructor(eventBus) {
+  constructor(eventBus, wishlist) {
     this.eventBus = eventBus;
-    this.boundResetPromoCode = this.resetSummary.bind(this);
-    this.run = this.#init;
+    this.wishlist = wishlist;
 
+    this.boundResetPromoCode = this.resetSummary.bind(this);
+
+    this.run = this.#init;
     this.#init();
   }
 
@@ -1106,8 +1109,15 @@ export class Cart {
     this.storeCart = new CartStore();
     this.serviceCart = new CartService(this.storeCart, this.config);
     this.eventsHandler = new CartUIEventsHandler(this);
-    this.ui = new CartUI(this.eventsHandler.getEvents(), this.config);
-    this.editCartUI = new EditCartUI(this.eventsHandler.getEventsEdit());
+    this.ui = new CartUI(
+      this.eventsHandler.getEvents(),
+      this.config,
+      this.wishlist,
+    );
+    this.editCartUI = new EditCartUI(
+      this.eventsHandler.getEventsEdit(),
+      this.wishlist,
+    );
   }
 
   async initComponentsPromo() {

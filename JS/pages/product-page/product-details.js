@@ -8,11 +8,10 @@ import {
 import { UIHelper } from "/JS/components/helpers.js";
 import { Carousel } from "/JS/pages/home-page/home-components.js";
 import { myBagInstance } from "/JS/components/dependencies.js";
-import { wishlistInstance } from "/JS/store/wishlist/wishlist.js";
 import { navigateTo } from "/JS/router.js";
 
 export class Details {
-  constructor(viewId, leftSecId, rightSecId, eventsBus) {
+  constructor(viewId, leftSecId, rightSecId, eventsBus, wishlist) {
     this.viewId = document.getElementById(viewId);
     this.leftSection = document.getElementById(leftSecId);
     this.rightSection = document.getElementById(rightSecId);
@@ -31,7 +30,7 @@ export class Details {
     this.eventsBus = eventsBus;
     this.myBag = myBagInstance;
 
-    this.wishlist = wishlistInstance;
+    this.wishlist = wishlist;
 
     this.handleUpdatePageData = this.updatePageData.bind(this);
 

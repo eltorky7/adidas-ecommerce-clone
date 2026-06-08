@@ -21,7 +21,7 @@ import {
  * renderItems مع كل تعريف متغير هل هيحصل تسريب ذاكرة عندك في ميثود Loop هل عند ال
  */
 
-class Wishlist {
+export class Wishlist {
   /**
    * @class Wishlist { Root }
    * @returns {void}
@@ -155,6 +155,4 @@ class Wishlist {
     });
   }
 }
-
-export const wishlistInstance = new Wishlist();
 //*============== { WishList Page } ==============

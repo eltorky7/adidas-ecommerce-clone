@@ -1,5 +1,5 @@
 import { AbstractView } from "/JS/pages/abstract-view.js";
-import { wishlistInstance } from "/JS/store/wishlist/wishlist.js";
+import { wishlistInstance } from "/JS/components/dependencies.js";
 
 class Config {
   static get load() {
