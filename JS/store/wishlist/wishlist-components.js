@@ -199,7 +199,7 @@ export class WishListUI {
       );
       const [linkOne, linkTwo] = cloneCart.querySelectorAll("a");
 
-      img.src = ite.img;
+      img.src = ite.image;
       iconHeart.src = ite.icon;
       productName.textContent = ite.name;
       productBadgesText.textContent = ite.badgesText;
@@ -257,7 +257,7 @@ export class WishlistService {
    * @param {string} sku
    * @returns {object}
    */
-  loadAdded(currItem, sku, isCartItem, indexActive) {
+  loadAdded(currItem, sku, isCartItem = true, indexActive) {
     if (isCartItem) {
       return {
         ...currItem,
@@ -277,7 +277,7 @@ export class WishlistService {
           : currItem.old_price,
         currency: currItem.currency,
         is_sale: currItem.is_sale,
-        img: currItem.variants[indexActive].images.basic,
+        image: currItem.variants[indexActive].images.basic,
         icon: "./images/wishlist_full.svg",
         badgesText: currItem.title_new,
         href: location.href,

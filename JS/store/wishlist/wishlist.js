@@ -123,13 +123,12 @@ export class Wishlist {
     return { onclickLogin, onclickHeart };
   }
 
-  toggleItem(curr, sku, indexClr, isActive) {
+  toggleItem(curr, sku, currentIndex, isActive) {
     if (!isActive) this.store.delete(sku);
-    else this.store.add(this.service.loadAdded(curr, sku, false, indexClr));
-
+    else this.store.add(this.service.loadAdded(curr, sku, false, currentIndex));
     this.storage.save(this.store.items);
-    if (this.ui) this.ui.renderWishlistCounts(this.store.items.length);
 
+    if (this.ui) this.ui.renderWishlistCounts(this.store.items.length);
     this.channel.broadcast({
       type: "CHANGE_CURRENT_ITEM",
       value: this.store.items,
@@ -139,7 +138,6 @@ export class Wishlist {
   toggleFromCart(currItem, isActive) {
     //* Init
     const sku = this.service.skuFormate(currItem.sku);
-
     //* Update
     if (!isActive) this.store.add(this.service.loadAdded(currItem, sku));
     else this.store.delete(sku);

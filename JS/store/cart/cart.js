@@ -15,6 +15,7 @@ class Config {
       STORAGE_KEY: "cartItems",
       CHANNEL_NAME: "cart_channel",
       CHANNEL_PRODUCT_PAGE_NAME: "product_channel",
+      CHANNEL_WISHLIST_PAGE_NAME: "wishlist_channel",
     };
   }
 }
@@ -1157,15 +1158,6 @@ export class Cart {
     this.eventBus.on("aside-cart-checkout", this.ui.onCheckout);
   }
 
-  initSyncWishlist() {
-    this.wishlistChannelListener = new BroadcastChannel("wishlist_channel");
-    this.wishlistChannelListener.onmessage = ({ data }) => {
-      if (data.type === "CHANGE_CURRENT_ITEM") {
-        this.render(false);
-      }
-    };
-  }
-
   initSyncCart() {
     this.sync = new CartSync(this.config.CHANNEL_NAME, ({ data }) => {
       this.storeCart.setItem(this.serviceCart.initItems(data.cart));
@@ -1183,10 +1175,19 @@ export class Cart {
 
     this.channelProduct.onmessage = ({ data }) => {
       if (data.type === "CHANGE_CURRENT_ITEM") {
-        console.log("HELP");
         this.storeCart.setItem(this.serviceCart.initItems(data.data));
         this.render(false);
       }
+    };
+  }
+
+  initSyncWishlist() {
+    this.channelProduct = new BroadcastChannel(
+      this.config.CHANNEL_WISHLIST_PAGE_NAME,
+    );
+
+    this.channelProduct.onmessage = ({ data }) => {
+      if (data.type === "CHANGE_CURRENT_ITEM") this.render(false);
     };
   }
 
