@@ -15,6 +15,7 @@ class Config {
       DELIVERY_PRICE: 60,
       STORAGE_KEY: "cartItems",
       CHANNEL_NAME: "cart_channel",
+      CHANNEL_PRODUCT_PAGE_NAME: "product_channel",
     };
   }
 }
@@ -1077,10 +1078,14 @@ export class Cart {
     await this.initComponentsPromo();
 
     this.initEventsCart();
+
+    if (!hasRun) return;
+
     this.initSyncCart();
     this.initSyncWishlist();
+    this.initSyncProductPage();
 
-    if (hasRun) this.render();
+    this.render();
   }
 
   render(syncEnabled = true) {
@@ -1153,13 +1158,26 @@ export class Cart {
 
   initSyncCart() {
     this.sync = new CartSync(this.config.CHANNEL_NAME, ({ data }) => {
-      if (!data.length) return;
-
       this.storeCart.setItem(this.serviceCart.initItems(data.cart));
       this.storePromo.setPromos(data.promos);
       this.storePromo.setSummary(data.summary || null);
+
       this.render(false);
     });
+  }
+
+  initSyncProductPage() {
+    this.channelProduct = new BroadcastChannel(
+      this.config.CHANNEL_PRODUCT_PAGE_NAME,
+    );
+
+    this.channelProduct.onmessage = ({ data }) => {
+      if (data.type === "CHANGE_CURRENT_ITEM") {
+        console.log("HELP");
+        this.storeCart.setItem(this.serviceCart.initItems(data.data));
+        this.render(false);
+      }
+    };
   }
 
   postSyncCart() {

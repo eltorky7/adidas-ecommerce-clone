@@ -120,7 +120,7 @@ export class Details {
     this.renderRightSection();
     this.updateRecentProducts();
 
-    this.channel = new BroadcastChannel("cart_channel");
+    this.channel = new BroadcastChannel("product_channel");
     this.channel.onmessage = this.handleUpdatePageData;
 
     this.eventsBus.removeEvent("update-product", this.handleUpdatePageData);

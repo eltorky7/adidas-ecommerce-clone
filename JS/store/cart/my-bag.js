@@ -20,7 +20,7 @@ export class MyBag {
     this.focus = null;
     this.currency = "";
 
-    this.channelCart = new BroadcastChannel("cart_channel");
+    this.channelCart = new BroadcastChannel("product_channel");
 
     this.bagIconBtn.onclick = this.onclickBtnBagIcon.bind(this);
     this.handleAsideCheckoutClick = this.handleAsideCheckoutClick.bind(this);
@@ -53,18 +53,6 @@ export class MyBag {
     this.cartItemsData = [];
     this.updateCartItemsReadOnly();
     this.updateCarts();
-  }
-
-  initBroadcastChannel() {
-    this.channel = new BroadcastChannel("app");
-
-    this.channel.onmessage = ({ data }) => {
-      switch (data.type) {
-        case "UPDATE_CART":
-          this.updateUI();
-          break;
-      }
-    };
   }
 
   onStorageChange() {
